@@ -7,10 +7,11 @@ var LeapController = function() {
 		frameEventName: 'animationFrame',
 		useAllPlugins: true
 	});
+	this.leftHand = null;
+	this.rightHand = null;
 
 	this.controller.connect();
 	this.init();
-
 }
 
 LeapController.prototype.init = function() {
@@ -20,7 +21,18 @@ LeapController.prototype.init = function() {
 }
 
 LeapController.prototype.update = function() {
+	"use strict"
 	this.frame = this.controller.frame();
+	if (this.frame.hands.length > 0) {
+		for (var i = 0; i < this.frame.hands.length; i++) {
+			if (this.frame.hands[i].type == 'left') {
+				this.leftHand.updatePos(this.frame, i);
+			}
 
+			if (this.frame.hands[i].type == 'right') {
+				this.rightHand.updatePos(this.frame, i);
+			}
+		}
+	}
 }
 
