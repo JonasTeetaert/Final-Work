@@ -11,6 +11,7 @@ var Finger = function(note, position, direction) {
 };
 
 Finger.prototype.update = function(fingers) {
+
 };
 
 Finger.prototype.isDown = function() {
