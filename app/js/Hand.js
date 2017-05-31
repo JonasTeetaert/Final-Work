@@ -1,5 +1,5 @@
 // Hand
-var Hand = function(scene, type) {
+var Hand = function(type) {
 	// visual aspect
 	this.geometry = new THREE.BoxGeometry( 40, 40, 40);
 	this.material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
@@ -7,19 +7,27 @@ var Hand = function(scene, type) {
 	this.type = type;
 	this.speed = 2.5; // hoe rap je de hand beweegt
 	this.playMode = true; // true = ACTIVE, false = MENU
+	this.fingers = [];
+	this.position = new THREE.Vector3(0, 0, 0);
 
 	if (this.type == 'left') {
+    for (var i = 0; i < 5; i++) {
+      this.fingers[i] = new Finger(noteMap[4 - i]);
+    }
 		this.startPos = new THREE.Vector3(-window.innerWidth/4, -window.innerHeight/4, 0);
 		this.previousPos = this.startPos;
 	} 
 	if (this.type == 'right') {
+    for (var i = 0; i < 5; i++) {
+      this.fingers[i] = new Finger(noteMap[5 + i]);
+    }
 		this.startPos = new THREE.Vector3(window.innerWidth/4, -window.innerHeight/4, 0);
 		this.previousPos = this.startPos;
 	}
 
 	this.threeObject.position.x = this.startPos.x;
 	this.threeObject.position.y = this.startPos.y;
-	scene.add(this.threeObject);
+	threeController.scene.add(this.threeObject);
 
 	this.effects = [];
 	this.instruments = [];
@@ -30,20 +38,28 @@ var Hand = function(scene, type) {
 	}
 }
 
-Hand.prototype.updatePos = function(frame, index) {
-	this.previousPos = this.position;
+Hand.prototype.UpdateFingers = function() {
+	//update fingers
+};
 
+Hand.prototype.update = function(index) {
+  console.log(this.position);
+	this.previousPos = this.position;
 	this.hand = frame.hands[index];
 	this.position = new THREE.Vector3(this.hand.palmPosition[0], this.hand.palmPosition[1], this.hand.palmPosition[2]);
 	if (this.playMode) {
 
 	}
+  for (var i = 0; i < this.hand.fingers.length; i++) {
+    this.fingers[i].update(frame.hands[index.fingers]);
+  }
 
 	this.calculatePos();
 	this.calculatePlayMode();
 }
 
 Hand.prototype.calculatePos = function() {
+  console.log(this.previousPos);
 	this.threeObject.position.x -= (this.previousPos.x - this.position.x) * this.speed;
 	this.threeObject.position.y -= (this.previousPos.y - this.position.y) * this.speed;
 }

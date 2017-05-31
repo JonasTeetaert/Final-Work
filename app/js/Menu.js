@@ -1,9 +1,6 @@
 // Menu
-var Menu = function(threeController, leapController) {
+var Menu = function() {
 	this.scene = threeController.scene;
-	this.leapController = leapController;
-	this.leftHand = leapController.leftHand;
-	this.rightHand = leapController.rightHand;
 	this.rows = 6;
 	this.left = -window.innerWidth/2;
 	this.top = window.innerHeight/2 - window.innerHeight/ (this.rows * 2);
@@ -19,19 +16,19 @@ Menu.prototype.init = function() {
 	this.bgSound = new MenuItem(this.scene, window.innerWidth, this.menuItemHeight, 0, this.top);
 
 	// leftHand
-	for (var i = 1; i <= this.leftHand.effects.length; i++) {
+	for (var i = 1; i <= leftHand.effects.length; i++) {
 		this.leftHandMenuItems.push(new MenuItem(this.scene, this.menuItemWidth, this.menuItemHeight, this.left +  this.menuItemWidth/2, this.top - this.menuItemHeight * i+1));
 	}
-	for (var i = 1; i <= this.leftHand.instruments.length; i++) {
+	for (var i = 1; i <= leftHand.instruments.length; i++) {
 		this.leftHandMenuItems.push(new MenuItem(this.scene, this.menuItemWidth, this.menuItemHeight, this.left + 3*this.menuItemWidth/2, this.top - this.menuItemHeight * i+1));
 	}
-
+ //TODO: effecten en instrumenten zijn hetzelfde per hand maar toewijzing is specifiek per hand -> samenvoegen en effects[] ipv righthand.effects?
 	// rightHand
-	for (var i = 1; i <= this.rightHand.effects.length; i++) {
+	for (var i = 1; i <= rightHand.effects.length; i++) {
 		this.rightHandMenuItems.push(new MenuItem(this.scene, this.menuItemWidth, this.menuItemHeight, this.menuItemWidth/2 , this.top - this.menuItemHeight * i+1));
 	}
 
-	for (var i = 1; i <= this.rightHand.instruments.length; i++) {
+	for (var i = 1; i <= rightHand.instruments.length; i++) {
 		this.rightHandMenuItems.push(new MenuItem(this.scene, this.menuItemWidth, this.menuItemHeight, 3/2 * this.menuItemWidth, this.top - this.menuItemHeight * i+1));
 	}
 
@@ -39,35 +36,35 @@ Menu.prototype.init = function() {
 
 // Menu item 
 
-Menu.prototype.checkPlayMode = function() {
-	if (!this.leftHand.playMode || !this.rightHand.playMode ) {
+Menu.prototype.checkPlayMode = function() { // checkplaymode in handobject?
+	if (!leftHand.playMode || !rightHand.playMode ) {
 		this.bgSound.material.opacity = 1;
 	} else {
 		this.bgSound.material.opacity = 0;
 	}
 
-	if (!this.leftHand.playMode) {
+	if (!leftHand.playMode) {
 		// lefthand menu active
 		for (var i = 0; i < this.leftHandMenuItems.length; i++) {
 			this.leftHandMenuItems[i].material.opacity = 1;
-		};
+		}
 
 	} else {
 		for (var i = 0; i < this.leftHandMenuItems.length; i++) {
 			this.leftHandMenuItems[i].material.opacity = 0;
-		};
+		}
 	}
 
-	if (!this.rightHand.playMode) {
+	if (!rightHand.playMode) {
 		// rightHand menu active
 		for (var i = 0; i < this.rightHandMenuItems.length; i++) {
 			this.rightHandMenuItems[i].material.opacity = 1;
-		};
+		}
 
 	} else {
 		for (var i = 0; i < this.rightHandMenuItems.length; i++) {
 			this.rightHandMenuItems[i].material.opacity = 0;
-		};
+		}
 
 	}
 }
