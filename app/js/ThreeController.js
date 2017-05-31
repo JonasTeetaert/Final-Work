@@ -24,7 +24,7 @@ ThreeController.prototype.init = function() {
 } 
 
 ThreeController.prototype.render = function() {
-	requestAnimationFrame(this.render.bind(this));
+	requestAnimationFrame(this.render.bind(this)); //TODO: request animframe uitbreiden
 	this.leapController.update();
 	menu.checkPlayMode();
 
