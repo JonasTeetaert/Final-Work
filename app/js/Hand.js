@@ -9,8 +9,7 @@ var Hand = function(type) {
 	this.playMode = true; // true = ACTIVE, false = MENU
 	this.fingers = [];
 	this.position = new THREE.Vector3(0, 0, 0);
-
-
+	this.active = false;
 
 	if (this.type == 'left') {
     for (var i = 0; i < 5; i++) {
@@ -42,7 +41,7 @@ Hand.prototype.setEffect = function(fx) {
 
 Hand.prototype.setInstrument = function(instr) {
   this.instrument ? this.instrument.dispose() : null;
-  this.instrument = instr.toMaster();
+  this.instrument = instr;
 }
 
 Hand.prototype.update = function(index) {
@@ -53,19 +52,14 @@ Hand.prototype.update = function(index) {
 
 	}
   for (var i = 0; i < this.hand.fingers.length; i++) {
-
+	//TODO: releasen bij vinger niet gededecteerd
     this.fingers[i].update(this.hand.fingers[i]);
 
     if (this.fingers[i].isDown && !this.fingers[i].wasDown) {
-
-      console.log('trigger');
-      this.instrument.triggerAttack(this.hand.fingers[i].note);
-      this.fingers[i].wasDown = true;
+      this.instrument.triggerAttack(this.fingers[i].note);
     } else if (this.fingers[i].wasDown && !this.fingers[i].isDown) {
-
       console.log('release');
-      this.instrument.triggerRelease(this.hand.fingers[i].note);
-      this.fingers[i].wasDown = false;
+      this.instrument.triggerRelease(this.fingers[i].note);
 
     }
   }

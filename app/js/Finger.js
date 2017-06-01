@@ -9,7 +9,7 @@ var Finger = function(note, position, direction) {
   this.direction = direction || 0;
   this.isDown = false;
   this.wasDown = false;
-
+  this.active = false;
 };
 
 Finger.prototype.update = function(finger) {
@@ -18,8 +18,18 @@ Finger.prototype.update = function(finger) {
   this.position.y = finger.tipPosition[1];
 
   if (((Math.round(this.direction * 100) / 100) <= -0.4)) {
+    if (this.isDown === false) {
+      this.wasDown = false;
+    } else {
+      this.wasDown = true;
+    }
     this.isDown = true;
   } else {
+    if (this.isDown === true) {
+      this.wasDown = true;
+    } else {
+      this.wasDown = false;
+    }
     this.isDown = false;
   }
 };
