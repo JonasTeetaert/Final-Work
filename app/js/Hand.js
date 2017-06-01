@@ -9,7 +9,11 @@ var Hand = function(type) {
 	this.playMode = true; // true = ACTIVE, false = MENU
 	this.fingers = [];
 	this.position = new THREE.Vector3(0, 0, 0);
-
+  this.ActiveInstruments = [];
+	for (var i = 0; i < instruments.length; i++) {
+		if (i === 0) {this.ActiveInstruments[i] = true;} else {this.ActiveInstruments[i] = false;}
+	}
+	console.log(this.ActiveInstruments);
 	if (this.type == 'left') {
     for (var i = 0; i < 5; i++) {
       this.fingers[i] = new Finger(noteMap[4 - i]);
@@ -33,8 +37,8 @@ var Hand = function(type) {
 	this.instruments = [];
 
 	for (var i = 0; i < 5; i++) {
-		this.effects.push(new Effect());
-		this.instruments.push(new Instrument());
+		//this.effects.push(new Effect());
+		//this.instruments.push(new Instrument());
 	}
 }
 
@@ -43,7 +47,6 @@ Hand.prototype.UpdateFingers = function() {
 };
 
 Hand.prototype.update = function(index) {
-  console.log(this.position);
 	this.previousPos = this.position;
 	this.hand = frame.hands[index];
 	this.position = new THREE.Vector3(this.hand.palmPosition[0], this.hand.palmPosition[1], this.hand.palmPosition[2]);
@@ -59,7 +62,6 @@ Hand.prototype.update = function(index) {
 }
 
 Hand.prototype.calculatePos = function() {
-  console.log(this.previousPos);
 	this.threeObject.position.x -= (this.previousPos.x - this.position.x) * this.speed;
 	this.threeObject.position.y -= (this.previousPos.y - this.position.y) * this.speed;
 }
