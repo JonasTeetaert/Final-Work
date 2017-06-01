@@ -19,8 +19,6 @@ document.addEventListener('DOMContentLoaded', function() {
 		new Tone.PingPongDelay("16n", 0.2)
 	];
 
-  setEffect(effects[1]);
-
 	leapController = new LeapController();
 	threeController = new ThreeController();
 
@@ -33,9 +31,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
   rightHand.setEffect(effects[0]);
   rightHand.setInstrument(instruments[0]);
-
-  console.log(instruments[0]);
-
 
   menu = new Menu();
 

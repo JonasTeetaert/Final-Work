@@ -10,6 +10,8 @@ var Hand = function(type) {
 	this.fingers = [];
 	this.position = new THREE.Vector3(0, 0, 0);
 
+
+
 	if (this.type == 'left') {
     for (var i = 0; i < 5; i++) {
       this.fingers[i] = new Finger(noteMap[4 - i]);
@@ -31,6 +33,8 @@ var Hand = function(type) {
 
 }
 
+
+
 Hand.prototype.setEffect = function(fx) {
 	this.effect ? this.effect.dispose() : null;
   this.effect = fx.toMaster();
@@ -41,10 +45,6 @@ Hand.prototype.setInstrument = function(instr) {
   this.instrument = instr.toMaster();
 }
 
-Hand.prototype.UpdateFingers = function() {
-	//update fingers
-};
-
 Hand.prototype.update = function(index) {
 	this.previousPos = this.position;
 	this.hand = frame.hands[index];
@@ -53,7 +53,21 @@ Hand.prototype.update = function(index) {
 
 	}
   for (var i = 0; i < this.hand.fingers.length; i++) {
-    this.fingers[i].update(frame.hands[index.fingers]);
+
+    this.fingers[i].update(this.hand.fingers[i]);
+
+    if (this.fingers[i].isDown && !this.fingers[i].wasDown) {
+
+      console.log('trigger');
+      this.instrument.triggerAttack(this.hand.fingers[i].note);
+      this.fingers[i].wasDown = true;
+    } else if (this.fingers[i].wasDown && !this.fingers[i].isDown) {
+
+      console.log('release');
+      this.instrument.triggerRelease(this.hand.fingers[i].note);
+      this.fingers[i].wasDown = false;
+
+    }
   }
 
 	this.calculatePos();
