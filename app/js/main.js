@@ -1,5 +1,3 @@
-// merge test
-
 var fps, threeController, leapController, leftHand, rightHand, menu, noteMap, frame; // frame globaal zette: kunnen  alle objecten er aan? bij elke update de globale frame object updaten
 
 document.addEventListener('DOMContentLoaded', function(){
