@@ -41,7 +41,7 @@ Hand.prototype.setEffect = function(fx) {
 
 Hand.prototype.setInstrument = function(instr) {
   this.instrument ? this.instrument.dispose() : null;
-  this.instrument = instr;
+  this.instrument = instr.toMaster();
 }
 
 Hand.prototype.update = function(index) {
