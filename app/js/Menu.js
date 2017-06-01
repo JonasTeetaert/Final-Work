@@ -15,23 +15,14 @@ var Menu = function() {
 Menu.prototype.init = function() {
 	this.bgSound = new MenuItem(this.scene, window.innerWidth, this.menuItemHeight, 0, this.top);
 
-	// leftHand
-	for (var i = 1; i <= leftHand.effects.length; i++) {
+	for (var i = 1; i <= effects.length; i++) {
 		this.leftHandMenuItems.push(new MenuItem(this.scene, this.menuItemWidth, this.menuItemHeight, this.left +  this.menuItemWidth/2, this.top - this.menuItemHeight * i+1));
+    this.rightHandMenuItems.push(new MenuItem(this.scene, this.menuItemWidth, this.menuItemHeight, this.menuItemWidth/2 , this.top - this.menuItemHeight * i+1));
 	}
-	for (var i = 1; i <= leftHand.instruments.length; i++) {
+	for (var i = 1; i <= instruments.length; i++) {
 		this.leftHandMenuItems.push(new MenuItem(this.scene, this.menuItemWidth, this.menuItemHeight, this.left + 3*this.menuItemWidth/2, this.top - this.menuItemHeight * i+1));
+    this.rightHandMenuItems.push(new MenuItem(this.scene, this.menuItemWidth, this.menuItemHeight, 3/2 * this.menuItemWidth, this.top - this.menuItemHeight * i+1));
 	}
- //TODO: effecten en instrumenten zijn hetzelfde per hand maar toewijzing is specifiek per hand -> samenvoegen en effects[] ipv righthand.effects?
-	// rightHand
-	for (var i = 1; i <= rightHand.effects.length; i++) {
-		this.rightHandMenuItems.push(new MenuItem(this.scene, this.menuItemWidth, this.menuItemHeight, this.menuItemWidth/2 , this.top - this.menuItemHeight * i+1));
-	}
-
-	for (var i = 1; i <= rightHand.instruments.length; i++) {
-		this.rightHandMenuItems.push(new MenuItem(this.scene, this.menuItemWidth, this.menuItemHeight, 3/2 * this.menuItemWidth, this.top - this.menuItemHeight * i+1));
-	}
-
 }
 
 // Menu item 

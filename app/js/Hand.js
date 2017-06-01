@@ -9,11 +9,7 @@ var Hand = function(type) {
 	this.playMode = true; // true = ACTIVE, false = MENU
 	this.fingers = [];
 	this.position = new THREE.Vector3(0, 0, 0);
-  this.ActiveInstruments = [];
-	for (var i = 0; i < instruments.length; i++) {
-		if (i === 0) {this.ActiveInstruments[i] = true;} else {this.ActiveInstruments[i] = false;}
-	}
-	console.log(this.ActiveInstruments);
+
 	if (this.type == 'left') {
     for (var i = 0; i < 5; i++) {
       this.fingers[i] = new Finger(noteMap[4 - i]);
@@ -33,13 +29,16 @@ var Hand = function(type) {
 	this.threeObject.position.y = this.startPos.y;
 	threeController.scene.add(this.threeObject);
 
-	this.effects = [];
-	this.instruments = [];
+}
 
-	for (var i = 0; i < 5; i++) {
-		//this.effects.push(new Effect());
-		//this.instruments.push(new Instrument());
-	}
+Hand.prototype.setEffect = function(fx) {
+	this.effect ? this.effect.dispose() : null;
+  this.effect = fx.toMaster();
+}
+
+Hand.prototype.setInstrument = function(instr) {
+  this.instrument ? this.instrument.dispose() : null;
+  this.instrument = instr.toMaster();
 }
 
 Hand.prototype.UpdateFingers = function() {
