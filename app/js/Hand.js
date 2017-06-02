@@ -30,29 +30,20 @@ var Hand = function(type) {
 	this.threeObject.position.y = this.startPos.y;
 	threeController.scene.add(this.threeObject);
 
-}
-
-
+};
 
 Hand.prototype.setEffect = function(fx) {
 	this.effect ? this.effect.dispose() : null;
   this.effect = fx.toMaster();
-}
+};
 
 Hand.prototype.setInstrument = function(instr) {
   this.instrument ? this.instrument.dispose() : null;
   this.instrument = instr.toMaster();
-}
+};
 
-Hand.prototype.update = function(index) {
-	this.previousPos = this.position;
-	this.hand = frame.hands[index];
-	this.position = new THREE.Vector3(this.hand.palmPosition[0], this.hand.palmPosition[1], this.hand.palmPosition[2]);
-	if (this.playMode) {
-
-	}
+Hand.prototype.detectTrigger = function() {
   for (var i = 0; i < this.hand.fingers.length; i++) {
-	//TODO: releasen bij vinger niet gededecteerd
     this.fingers[i].update(this.hand.fingers[i]);
 
     if (this.fingers[i].isDown && !this.fingers[i].wasDown) {
@@ -63,15 +54,68 @@ Hand.prototype.update = function(index) {
 
     }
   }
+};
 
-	this.calculatePos();
-	this.calculatePlayMode();
-}
+Hand.prototype.update = function() {
+  switch (frame.hands.length) {
+    case 0:
+      this.active = false;
+      if (this.hand) {
+        for (var i = 0; i < this.hand.fingers.length; i++) {
+          this.instrument.triggerRelease(this.fingers[i].note);
+        }
+      }
+      break;
+    case 1:
+      if (frame.hands[0].type === this.type) { // handen en vingers zijn gedetecteerd en actief
+        this.active = true;
+        this.hand = frame.hands[0];
+        this.previousPos = this.position;
+        this.position = new THREE.Vector3(this.hand.palmPosition[0], this.hand.palmPosition[1], this.hand.palmPosition[2]);
+        if (this.playMode) {
+
+        }
+        this.detectTrigger();
+
+        this.calculatePos();
+        this.calculatePlayMode();
+      } else {
+          this.active = false;
+          if (this.hand) {
+            for (var i = 0; i < this.hand.fingers.length; i++) {
+              this.instrument.triggerRelease(this.fingers[i].note);
+            }
+          }
+        }
+
+      break;
+    case 2:
+      for (var i = 0; i < frame.hands.length; i++) {
+        if (frame.hands[i].type === this.type) { // handen en vingers zijn gedetecteerd en actief
+          this.active = true;
+          this.hand = frame.hands[i];
+          this.previousPos = this.position;
+          this.position = new THREE.Vector3(this.hand.palmPosition[0], this.hand.palmPosition[1], this.hand.palmPosition[2]);
+          if (this.playMode) {
+
+          }
+          this.detectTrigger();
+
+          this.calculatePos();
+          this.calculatePlayMode();
+        }
+      }
+      break;
+		default:
+			this.active = false;
+  }
+  console.log(this.type, this.active);
+};
 
 Hand.prototype.calculatePos = function() {
 	this.threeObject.position.x -= (this.previousPos.x - this.position.x) * this.speed;
 	this.threeObject.position.y -= (this.previousPos.y - this.position.y) * this.speed;
-}
+};
 
 Hand.prototype.calculatePlayMode = function() {
 	if (this.hand.grabStrength >= 1 ) {
@@ -82,4 +126,4 @@ Hand.prototype.calculatePlayMode = function() {
 		this.threeObject.material.color.setHex(0x00ff00);
 		this.playMode = true; // ACTIVE
 	}
-}
+};
