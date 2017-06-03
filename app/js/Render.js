@@ -5,11 +5,9 @@ function render() {
   if (fps.update()) {
     frame = leapController.controller.frame();
 
+    leftHand.update();
 
-          leftHand.update();
-
-          rightHand.update();
-
+    rightHand.update();
 
     menu.checkPlayMode();
 

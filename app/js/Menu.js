@@ -8,7 +8,6 @@ var Menu = function() {
 	this.menuItemHeight = window.innerHeight / this.rows;
 	this.leftHandMenuItems = [];
 	this.rightHandMenuItems = [];
-
 	this.init();
 }
 
