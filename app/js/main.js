@@ -6,10 +6,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
   noteMap = ['C5', 'D5', 'E5', 'F5', 'G5', 'A5', 'B5', 'C6', 'D6', 'E6'];
   instruments = [
-  	new Tone.PolySynth(3, Tone.Synth),
-    new Tone.PolySynth(3, Tone.AMSynth),
-    new Tone.PolySynth(3, Tone.FMSynth),
-    new Tone.PolySynth(3, Tone.DuoSynth)
+  	new Tone.PolySynth(1, Tone.Synth),
+    new Tone.PolySynth(1, Tone.AMSynth),
+    new Tone.PolySynth(1, Tone.FMSynth),
+    new Tone.PolySynth(1, Tone.DuoSynth)
 	];
 
   effects = [

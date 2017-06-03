@@ -23,10 +23,7 @@ var Finger = function(note, position, direction) {
 
 Finger.prototype.update = function(finger) {
   this.direction = finger.direction[1];
-  this.position.x = finger.tipPosition[0];
-  this.position.y = finger.tipPosition[1];
-  this.threeObject.position.x = this.position.x;
-  this.threeObject.position.y = this.position.y;
+  this.calculatePos(finger);
 
   if (((Math.round(this.direction * 100) / 100) <= -0.4)) {
     if (this.isDown === false) {
@@ -43,4 +40,11 @@ Finger.prototype.update = function(finger) {
     }
     this.isDown = false;
   }
+};
+
+Finger.prototype.calculatePos = function(finger) {
+  this.position.x = (finger.tipPosition[0] + 200)*(window.innerWidth/2 + window.innerWidth/2)/(200+200)-window.innerWidth/2;
+  this.position.y = (finger.tipPosition[1] - 100)*(window.innerHeight/2 + window.innerHeight/2)/(450-100)-window.innerHeight/2;
+  this.threeObject.position.x = this.position.x;
+  this.threeObject.position.y = this.position.y;
 };
