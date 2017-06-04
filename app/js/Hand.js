@@ -21,7 +21,6 @@ var Hand = function(type) {
       this.fingers[i] = new Finger(noteMap[5 + i]);
     }
 	}
-  console.log(this.startPos);
 	this.threeObject.position.x = this.position.x;
 	this.threeObject.position.y = this.position.y;
 	threeController.scene.add(this.threeObject);
@@ -34,8 +33,12 @@ Hand.prototype.setEffect = function(fx) {
 };
 
 Hand.prototype.setInstrument = function(instr) {
-  this.instrument ? this.instrument.dispose() : null;
-  this.instrument = instr.toMaster();
+  this.clearInstrument();
+  instr ? this.instrument = instr.toMaster() : null;
+};
+
+Hand.prototype.clearInstrument = function() {
+  this.instrument = undefined;
 };
 
 Hand.prototype.detectTrigger = function() { //detect trigger + update
@@ -43,9 +46,9 @@ Hand.prototype.detectTrigger = function() { //detect trigger + update
     this.fingers[i].update(this.hand.fingers[i]);
 
 
-      if (this.fingers[i].isDown && !this.fingers[i].wasDown && this.playMode) {
+      if (this.fingers[i].isDown && !this.fingers[i].wasDown && this.playMode && this.instrument) {
         this.instrument.triggerAttack(this.fingers[i].note);
-      } else if (this.fingers[i].wasDown && !this.fingers[i].isDown) {
+      } else if (this.fingers[i].wasDown && !this.fingers[i].isDown && this.instrument) {
         this.instrument.triggerRelease(this.fingers[i].note);
       }
 
@@ -53,9 +56,11 @@ Hand.prototype.detectTrigger = function() { //detect trigger + update
 };
 
 Hand.prototype.releaseNotes = function() {
+  if (this.instrument) {
     for (var i = 0; i < this.hand.fingers.length; i++) { // released noten als hand plots van scherm is
       this.instrument.triggerRelease(this.fingers[i].note);
     }
+  }
 };
 
 Hand.prototype.update = function() {
@@ -84,8 +89,6 @@ Hand.prototype.update = function() {
             this.releaseNotes();
             }
           }
-
-
       break;
     case 2:
       for (var i = 0; i < frame.hands.length; i++) {
@@ -104,7 +107,6 @@ Hand.prototype.update = function() {
 			this.active = false;
 			break;
   }
-  console.log(this.type, this.active);
 };
 
 Hand.prototype.calculatePos = function() {
