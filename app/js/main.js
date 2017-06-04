@@ -13,10 +13,10 @@ document.addEventListener('DOMContentLoaded', function() {
 	];
 
   effects = [
-  	new Tone.Filter(600),
+  	new Tone.Filter(300),
 		new Tone.Distortion(0.1),
-		new Tone.JCReverb(0),
-		new Tone.PingPongDelay("16n", 0.2)
+		new Tone.JCReverb(0.5),
+		new Tone.PingPongDelay("16n", 0.5)
 	];
 
 	leapController = new LeapController();
@@ -26,13 +26,13 @@ document.addEventListener('DOMContentLoaded', function() {
 	leftHand = new Hand('left');
 	rightHand = new Hand('right');
 
-	leftHand.setEffect(effects[0]);
-  leftHand.setInstrument(instruments[0]);
+	leftHand.setEffect(0);
 
-  rightHand.setEffect(effects[0]);
-  rightHand.setInstrument(instruments[0]);
+  rightHand.setInstrument(0);
+  Tone.Master.chain(leftHand.effect);
 
   menu = new Menu();
+
 
   window.requestAnimFrame(render);
 });

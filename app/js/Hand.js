@@ -24,26 +24,70 @@ var Hand = function(type) {
 	this.threeObject.position.x = this.position.x;
 	this.threeObject.position.y = this.position.y;
 	threeController.scene.add(this.threeObject);
-
 };
 
 Hand.prototype.setEffect = function(fx) {
-	this.clearInstrument()
-  fx ? this.effect = fx.toMaster() : null;
+  this.currentEffect = fx; // nummer van effect in de globale 'effects' array, als deze op undefined staat is effecten niet actief
+	this.clearInstrument(); // effecten en instrument niet samen bespeelbaar
+  this.effect = effects[fx];
+  this.effect? Tone.Master.chain(this.effect) : null;
 };
 
 Hand.prototype.clearEffect = function() {
   this.effect = undefined;
+  this.currentEffect = undefined;
 };
 
 Hand.prototype.setInstrument = function(instr) {
-  this.clearEffect();
-  instr ? this.instrument = instr.toMaster() : null;
+  this.currentInstr = instr;  // nummer van huidig instrument in globale 'instruments' array, undefined: geen instr maar een effect toegewezen
+  this.clearEffect(); // effecten en instrument niet samen bespeelbaar
+  this.instrument = instruments[instr].toMaster();
 };
 
 Hand.prototype.clearInstrument = function() {
   this.instrument = undefined;
+  this.currentInstr = undefined;
 };
+
+Hand.prototype.next = function() {
+  if (typeof this.currentInstr !== "undefined") { // als instrument aan staat, cycle door instrumenten
+    if (this.currentInstr === instruments.length - 1) {
+      this.currentInstr = 0;
+    } else {
+      this.currentInstr++;
+    }
+    this.releaseNotes();
+    this.setInstrument(this.currentInstr);
+  } else if (typeof this.currentEffect !== "undefined") { // als effect aan staat, cycledoor effecten
+    if (this.currentEffect === effects.length - 1) {
+      this.currentEffect = 0;
+    } else {
+      this.currentEffect++;
+    }
+    this.releaseNotes();
+    this.setEffect(this.currentEffect);
+  }
+}
+
+Hand.prototype.previous = function() {
+  if (typeof this.currentInstr !== "undefined") { //als instrument aan staat, cycle door instrumenten
+    if (this.currentInstr === 0) {
+      this.currentInstr = instruments.length - 1;
+    } else {
+      this.currentInstr--;
+    }
+    this.releaseNotes();
+    this.setInstrument(this.currentInstr);
+  } else if (typeof this.currentEffect !== "undefined") { // als effect aanstaat, cycle door effecten
+    if (this.currentEffect === 0) {
+      this.currentEffect = effects.length - 1;
+    } else {
+      this.currentEffect--;
+    }
+    this.releaseNotes();
+    this.setEffect(this.currentEffect);
+  }
+}
 
 Hand.prototype.detectTrigger = function() { //detect trigger + update
   for (var i = 0; i < this.hand.fingers.length; i++) {
@@ -68,6 +112,9 @@ Hand.prototype.releaseNotes = function() {
 };
 
 Hand.prototype.update = function() {
+  // TODO: per effect moet er een ander value getracked worden anders ERROR
+  //this.effect ? this.effect.frequency.value = this.reMap(this.position.y, -window.innerHeight/2, window.innerHeight/2, 0, 6000) : null;
+  //this.effect ? console.log(this.effect.frequency.value) : null;
   if (!this.playMode) {
     this.releaseNotes();
   }
@@ -129,4 +176,8 @@ Hand.prototype.calculatePlayMode = function() {
 		this.threeObject.material.color.setHex(0x00ff00);
 		this.playMode = true; // ACTIVE
 	}
+};
+
+Hand.prototype.reMap = function(value, low1, high1, low2, high2) {
+    return low2 + (value - low1) * (high2 - low2) / (high1 - low1);
 };

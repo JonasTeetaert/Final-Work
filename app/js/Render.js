@@ -10,6 +10,7 @@ function render() {
     rightHand.update();
 
     menu.checkPlayMode();
+    // TODO: warning bij effect op elk hand?
 
   }
   threeController.render();
