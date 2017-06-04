@@ -28,12 +28,16 @@ var Hand = function(type) {
 };
 
 Hand.prototype.setEffect = function(fx) {
-	this.effect ? this.effect.dispose() : null;
-  this.effect = fx.toMaster();
+	this.clearInstrument()
+  fx ? this.effect = fx.toMaster() : null;
+};
+
+Hand.prototype.clearEffect = function() {
+  this.effect = undefined;
 };
 
 Hand.prototype.setInstrument = function(instr) {
-  this.clearInstrument();
+  this.clearEffect();
   instr ? this.instrument = instr.toMaster() : null;
 };
 
