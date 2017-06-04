@@ -30,7 +30,7 @@ Hand.prototype.setEffect = function(fx) {
   this.currentEffect = fx; // nummer van effect in de globale 'effects' array, als deze op undefined staat is effecten niet actief
 	this.clearInstrument(); // effecten en instrument niet samen bespeelbaar
   this.effect = effects[fx];
-  this.effect? Tone.Master.chain(this.effect) : null;
+  this.effect ? Tone.Master.chain(this.effect) : null;
 };
 
 Hand.prototype.clearEffect = function() {

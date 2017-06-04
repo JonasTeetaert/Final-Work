@@ -26,10 +26,9 @@ document.addEventListener('DOMContentLoaded', function() {
 	leftHand = new Hand('left');
 	rightHand = new Hand('right');
 
-	leftHand.setEffect(0);
+	leftHand.setInstrument(1);
 
   rightHand.setInstrument(0);
-  Tone.Master.chain(leftHand.effect);
 
   menu = new Menu();
 

@@ -45,7 +45,6 @@ var LeapController = function() {
             }
           }
         }
-        console.log(swipeDirection);
         break;
     }
   });
