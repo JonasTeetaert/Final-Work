@@ -28,9 +28,10 @@ var Hand = function(type) {
 
 Hand.prototype.setEffect = function(fx) {
   this.currentEffect = fx; // nummer van effect in de globale 'effects' array, als deze op undefined staat is effecten niet actief
+  // currentEffect variable is nodig om de cyclen met swipes
 	this.clearInstrument(); // effecten en instrument niet samen bespeelbaar
   this.effect = effects[fx];
-  this.effect ? Tone.Master.chain(this.effect) : null;
+  this.effect ? Tone.Master.chain(this.effect) : null; // zet effect als chain in master. gooit vorige chain weg: gaat dus niet op 2 handen. weet nog niet wat er gebeurd als er 2 effecten worden ingesteld
 };
 
 Hand.prototype.clearEffect = function() {
@@ -41,7 +42,7 @@ Hand.prototype.clearEffect = function() {
 Hand.prototype.setInstrument = function(instr) {
   this.currentInstr = instr;  // nummer van huidig instrument in globale 'instruments' array, undefined: geen instr maar een effect toegewezen
   this.clearEffect(); // effecten en instrument niet samen bespeelbaar
-  this.instrument = instruments[instr].toMaster();
+  this.instrument = instruments[instr].toMaster(); // connect instr to master (masterchain met effect komt hierna)
 };
 
 Hand.prototype.clearInstrument = function() {
@@ -89,25 +90,18 @@ Hand.prototype.previous = function() {
   }
 }
 
-Hand.prototype.detectTrigger = function() { //detect trigger + update
+Hand.prototype.updateFinger = function() { //detect trigger + updatefinger
   for (var i = 0; i < this.hand.fingers.length; i++) {
     this.fingers[i].update(this.hand.fingers[i]);
 
-
+      //kijken of vinger naar beneden is en vorig frame niet: trigger. zoniet word hij getriggerd elk frame hij naar beneden is
       if (this.fingers[i].isDown && !this.fingers[i].wasDown && this.playMode && this.instrument) {
         this.instrument.triggerAttack(this.fingers[i].note);
       } else if (this.fingers[i].wasDown && !this.fingers[i].isDown && this.instrument) {
+        // note releasen (afzetten) als vinger recht is en vorig frame niet
         this.instrument.triggerRelease(this.fingers[i].note);
       }
 
-  }
-};
-
-Hand.prototype.releaseNotes = function() {
-  if (this.instrument) {
-    for (var i = 0; i < this.hand.fingers.length; i++) { // released noten als hand plots van scherm is
-      this.instrument.triggerRelease(this.fingers[i].note);
-    }
   }
 };
 
@@ -115,11 +109,11 @@ Hand.prototype.update = function() {
   // TODO: per effect moet er een ander value getracked worden anders ERROR
   //this.effect ? this.effect.frequency.value = this.reMap(this.position.y, -window.innerHeight/2, window.innerHeight/2, 0, 6000) : null;
   //this.effect ? console.log(this.effect.frequency.value) : null;
-  if (!this.playMode) {
+  if (!this.playMode) { // noten stoppen in menu mode
     this.releaseNotes();
   }
   switch (frame.hands.length) {
-    case 0:
+    case 0: // geen vingers meer gedetecteerd: release all notes (geluid stopt, anders spelen ze door)
       this.active = false;
       if (this.hand) { // check for undefined (first frame)
         this.releaseNotes();
@@ -130,7 +124,7 @@ Hand.prototype.update = function() {
         this.hand = frame.hands[0];
         this.active = true;
 
-        this.detectTrigger();
+        this.updateFinger();
 
         this.calculatePos();
         this.calculatePlayMode();
@@ -147,7 +141,7 @@ Hand.prototype.update = function() {
           this.hand = frame.hands[i];
           this.active = true;
 
-          this.detectTrigger();
+          this.updateFinger();
 
           this.calculatePos();
           this.calculatePlayMode();
@@ -165,6 +159,14 @@ Hand.prototype.calculatePos = function() {
   this.position.y = (this.hand.palmPosition[1] - 100)*(window.innerHeight/2 + window.innerHeight/2)/(450-100)-window.innerHeight/2;
 	this.threeObject.position.x = this.position.x;
 	this.threeObject.position.y = this.position.y;
+};
+
+Hand.prototype.releaseNotes = function() {
+  if (this.instrument) {
+    for (var i = 0; i < this.hand.fingers.length; i++) { // released noten als hand plots van scherm is
+      this.instrument.triggerRelease(this.fingers[i].note);
+    }
+  }
 };
 
 Hand.prototype.calculatePlayMode = function() {

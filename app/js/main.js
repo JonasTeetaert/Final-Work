@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	leftHand.setInstrument(1);
 
-  rightHand.setInstrument(0);
+  rightHand.setInstrument(1);
 
   menu = new Menu();
 
