@@ -101,14 +101,13 @@ Hand.prototype.updateFinger = function() { //detect trigger + updatefinger
         // note releasen (afzetten) als vinger recht is en vorig frame niet
         this.instrument.triggerRelease(this.fingers[i].note);
       }
-
   }
 };
 
 Hand.prototype.update = function() {
   // TODO: per effect moet er een ander value getracked worden anders ERROR
-  //this.effect ? this.effect.frequency.value = this.reMap(this.position.y, -window.innerHeight/2, window.innerHeight/2, 0, 6000) : null;
-  //this.effect ? console.log(this.effect.frequency.value) : null;
+  this.effect ? this.effect.frequency.value = this.reMap(this.position.y, -window.innerHeight/2, window.innerHeight/2, 0, 6000) : null;
+  this.effect ? console.log(this.effect.frequency.value) : null;
   if (!this.playMode) { // noten stoppen in menu mode
     this.releaseNotes();
   }
