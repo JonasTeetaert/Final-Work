@@ -8,31 +8,21 @@ var Menu = function() {
 	this.menuItemHeight = window.innerHeight / this.rows;
 	this.leftHandMenuItems = [];
 	this.rightHandMenuItems = [];
-
 	this.init();
-}
+};
 
 Menu.prototype.init = function() {
 	this.bgSound = new MenuItem(this.scene, window.innerWidth, this.menuItemHeight, 0, this.top);
 
-	// leftHand
-	for (var i = 1; i <= leftHand.effects.length; i++) {
+	for (var i = 1; i <= effects.length; i++) {
 		this.leftHandMenuItems.push(new MenuItem(this.scene, this.menuItemWidth, this.menuItemHeight, this.left +  this.menuItemWidth/2, this.top - this.menuItemHeight * i+1));
+    this.rightHandMenuItems.push(new MenuItem(this.scene, this.menuItemWidth, this.menuItemHeight, this.menuItemWidth/2 , this.top - this.menuItemHeight * i+1));
 	}
-	for (var i = 1; i <= leftHand.instruments.length; i++) {
+	for (var i = 1; i <= instruments.length; i++) {
 		this.leftHandMenuItems.push(new MenuItem(this.scene, this.menuItemWidth, this.menuItemHeight, this.left + 3*this.menuItemWidth/2, this.top - this.menuItemHeight * i+1));
+    this.rightHandMenuItems.push(new MenuItem(this.scene, this.menuItemWidth, this.menuItemHeight, 3/2 * this.menuItemWidth, this.top - this.menuItemHeight * i+1));
 	}
- //TODO: effecten en instrumenten zijn hetzelfde per hand maar toewijzing is specifiek per hand -> samenvoegen en effects[] ipv righthand.effects?
-	// rightHand
-	for (var i = 1; i <= rightHand.effects.length; i++) {
-		this.rightHandMenuItems.push(new MenuItem(this.scene, this.menuItemWidth, this.menuItemHeight, this.menuItemWidth/2 , this.top - this.menuItemHeight * i+1));
-	}
-
-	for (var i = 1; i <= rightHand.instruments.length; i++) {
-		this.rightHandMenuItems.push(new MenuItem(this.scene, this.menuItemWidth, this.menuItemHeight, 3/2 * this.menuItemWidth, this.top - this.menuItemHeight * i+1));
-	}
-
-}
+};
 
 // Menu item 
 
@@ -67,7 +57,7 @@ Menu.prototype.checkPlayMode = function() { // checkplaymode in handobject?
 		}
 
 	}
-}
+};
 
 
 
@@ -85,17 +75,17 @@ var MenuItem = function(scene, width, height, x, y) {
 	this.threeObject.position.y = y;
 
 	this.active = false;
-}
+};
 
 MenuItem.prototype.hover = function(hand) {
 	if (hand.threeObject.position.x > this.threeObject.position.x && hand.threeObject.position.x < this.threeObject.position.x + this.width && hand.threeObject.position.y < this.threeObject.position.y && hand.threeObject.position.y > this.threeObject.position.y + this.height) {
 		console.log('hover');
 	}
-}
+};
 
 MenuItem.prototype.active = function() {
 	this.active = true;
 	this.material.wireframe = false;
 	this.material.opacity = 1;
-}
+};
 

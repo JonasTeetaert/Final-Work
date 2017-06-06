@@ -1,3 +1,3 @@
-var Effect = function() {
-	this.active = false;
-}
+var setEffect = function(fx) {
+	fx.toMaster();
+};

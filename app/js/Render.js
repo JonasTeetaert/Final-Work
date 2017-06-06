@@ -5,19 +5,13 @@ function render() {
   if (fps.update()) {
     frame = leapController.controller.frame();
 
-    if (frame.hands.length > 0) {
-      for (var i = 0; i < frame.hands.length; i++) {
-        if (frame.hands[i].type === 'left') {
-          leftHand.update(i);
-        }
+    leftHand.update();
 
-        if (frame.hands[i].type === 'right') {
-          rightHand.update(i);
-        }
-      }
-    }
+    rightHand.update();
 
     menu.checkPlayMode();
+    // TODO: warning bij effect op elk hand?
+    // TODO: bij 2 verschillende instrumenten die tezamen gespeeld worden: gain te hoog 'gekraak'
 
   }
   threeController.render();

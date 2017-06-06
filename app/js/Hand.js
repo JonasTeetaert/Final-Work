@@ -1,7 +1,7 @@
 // Hand
 var Hand = function(type) {
 	// visual aspect
-	this.geometry = new THREE.BoxGeometry( 40, 40, 40);
+	this.geometry = new THREE.BoxGeometry( 10, 10, 10);
 	this.material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
 	this.threeObject = new THREE.Mesh( this.geometry, this.material );
 	this.type = type;
@@ -9,60 +9,165 @@ var Hand = function(type) {
 	this.playMode = true; // true = ACTIVE, false = MENU
 	this.fingers = [];
 	this.position = new THREE.Vector3(0, 0, 0);
+	this.active = false; // hand gedetecteed: true, anders false.  gebruiken voor visuals?
 
 	if (this.type == 'left') {
     for (var i = 0; i < 5; i++) {
       this.fingers[i] = new Finger(noteMap[4 - i]);
     }
-		this.startPos = new THREE.Vector3(-window.innerWidth/4, -window.innerHeight/4, 0);
-		this.previousPos = this.startPos;
 	} 
 	if (this.type == 'right') {
     for (var i = 0; i < 5; i++) {
       this.fingers[i] = new Finger(noteMap[5 + i]);
     }
-		this.startPos = new THREE.Vector3(window.innerWidth/4, -window.innerHeight/4, 0);
-		this.previousPos = this.startPos;
 	}
-
-	this.threeObject.position.x = this.startPos.x;
-	this.threeObject.position.y = this.startPos.y;
+	this.threeObject.position.x = this.position.x;
+	this.threeObject.position.y = this.position.y;
 	threeController.scene.add(this.threeObject);
-
-	this.effects = [];
-	this.instruments = [];
-
-	for (var i = 0; i < 5; i++) {
-		this.effects.push(new Effect());
-		this.instruments.push(new Instrument());
-	}
-}
-
-Hand.prototype.UpdateFingers = function() {
-	//update fingers
 };
 
-Hand.prototype.update = function(index) {
-  console.log(this.position);
-	this.previousPos = this.position;
-	this.hand = frame.hands[index];
-	this.position = new THREE.Vector3(this.hand.palmPosition[0], this.hand.palmPosition[1], this.hand.palmPosition[2]);
-	if (this.playMode) {
+Hand.prototype.setEffect = function(fx) {
+  this.currentEffect = fx; // nummer van effect in de globale 'effects' array, als deze op undefined staat is effecten niet actief
+  // currentEffect variable is nodig om de cyclen met swipes
+	this.clearInstrument(); // effecten en instrument niet samen bespeelbaar
+  this.effect = effects[fx];
+  this.effect ? Tone.Master.chain(this.effect) : null; // zet effect als chain in master. gooit vorige chain weg: gaat dus niet op 2 handen. weet nog niet wat er gebeurd als er 2 effecten worden ingesteld
+};
 
-	}
-  for (var i = 0; i < this.hand.fingers.length; i++) {
-    this.fingers[i].update(frame.hands[index.fingers]);
+Hand.prototype.clearEffect = function() {
+  this.effect = undefined;
+  this.currentEffect = undefined;
+};
+
+Hand.prototype.setInstrument = function(instr) {
+  this.currentInstr = instr;  // nummer van huidig instrument in globale 'instruments' array, undefined: geen instr maar een effect toegewezen
+  this.clearEffect(); // effecten en instrument niet samen bespeelbaar
+  this.instrument = instruments[instr].toMaster(); // connect instr to master (masterchain met effect komt hierna)
+};
+
+Hand.prototype.clearInstrument = function() {
+  this.instrument = undefined;
+  this.currentInstr = undefined;
+};
+
+Hand.prototype.next = function() {
+  if (typeof this.currentInstr !== "undefined") { // als instrument aan staat, cycle door instrumenten
+    if (this.currentInstr === instruments.length - 1) {
+      this.currentInstr = 0;
+    } else {
+      this.currentInstr++;
+    }
+    this.releaseNotes();
+    this.setInstrument(this.currentInstr);
+  } else if (typeof this.currentEffect !== "undefined") { // als effect aan staat, cycledoor effecten
+    if (this.currentEffect === effects.length - 1) {
+      this.currentEffect = 0;
+    } else {
+      this.currentEffect++;
+    }
+    this.releaseNotes();
+    this.setEffect(this.currentEffect);
   }
-
-	this.calculatePos();
-	this.calculatePlayMode();
 }
+
+Hand.prototype.previous = function() {
+  if (typeof this.currentInstr !== "undefined") { //als instrument aan staat, cycle door instrumenten
+    if (this.currentInstr === 0) {
+      this.currentInstr = instruments.length - 1;
+    } else {
+      this.currentInstr--;
+    }
+    this.releaseNotes();
+    this.setInstrument(this.currentInstr);
+  } else if (typeof this.currentEffect !== "undefined") { // als effect aanstaat, cycle door effecten
+    if (this.currentEffect === 0) {
+      this.currentEffect = effects.length - 1;
+    } else {
+      this.currentEffect--;
+    }
+    this.releaseNotes();
+    this.setEffect(this.currentEffect);
+  }
+}
+
+Hand.prototype.updateFinger = function() { //detect trigger + updatefinger
+  for (var i = 0; i < this.hand.fingers.length; i++) {
+    this.fingers[i].update(this.hand.fingers[i]);
+
+      //kijken of vinger naar beneden is en vorig frame niet: trigger. zoniet word hij getriggerd elk frame hij naar beneden is
+      if (this.fingers[i].isDown && !this.fingers[i].wasDown && this.playMode && this.instrument) {
+        this.instrument.triggerAttack(this.fingers[i].note);
+      } else if (this.fingers[i].wasDown && !this.fingers[i].isDown && this.instrument) {
+        // note releasen (afzetten) als vinger recht is en vorig frame niet
+        this.instrument.triggerRelease(this.fingers[i].note);
+      }
+
+  }
+};
+
+Hand.prototype.update = function() {
+  // TODO: per effect moet er een ander value getracked worden anders ERROR
+  //this.effect ? this.effect.frequency.value = this.reMap(this.position.y, -window.innerHeight/2, window.innerHeight/2, 0, 6000) : null;
+  //this.effect ? console.log(this.effect.frequency.value) : null;
+  if (!this.playMode) { // noten stoppen in menu mode
+    this.releaseNotes();
+  }
+  switch (frame.hands.length) {
+    case 0: // geen vingers meer gedetecteerd: release all notes (geluid stopt, anders spelen ze door)
+      this.active = false;
+      if (this.hand) { // check for undefined (first frame)
+        this.releaseNotes();
+      }
+      break;
+    case 1:
+      if (frame.hands[0].type === this.type) { // 1 hand en vingers zijn gedetecteerd en actief
+        this.hand = frame.hands[0];
+        this.active = true;
+
+        this.updateFinger();
+
+        this.calculatePos();
+        this.calculatePlayMode();
+      } else {
+          this.active = false;
+          if (this.hand) {
+            this.releaseNotes();
+            }
+          }
+      break;
+    case 2:
+      for (var i = 0; i < frame.hands.length; i++) {
+        if (frame.hands[i].type === this.type) { // 2 handen en vingers zijn gedetecteerd en actief
+          this.hand = frame.hands[i];
+          this.active = true;
+
+          this.updateFinger();
+
+          this.calculatePos();
+          this.calculatePlayMode();
+        }
+      }
+      break;
+		default:
+			this.active = false;
+			break;
+  }
+};
 
 Hand.prototype.calculatePos = function() {
-  console.log(this.previousPos);
-	this.threeObject.position.x -= (this.previousPos.x - this.position.x) * this.speed;
-	this.threeObject.position.y -= (this.previousPos.y - this.position.y) * this.speed;
-}
+  this.position.x = (this.hand.palmPosition[0] + 200)*(window.innerWidth/2 + window.innerWidth/2)/(200+200)-window.innerWidth/2;
+  this.position.y = (this.hand.palmPosition[1] - 100)*(window.innerHeight/2 + window.innerHeight/2)/(450-100)-window.innerHeight/2;
+	this.threeObject.position.x = this.position.x;
+	this.threeObject.position.y = this.position.y;
+};
+
+Hand.prototype.releaseNotes = function() {
+  if (this.instrument) {
+    for (var i = 0; i < this.hand.fingers.length; i++) { // released noten als hand plots van scherm is
+      this.instrument.triggerRelease(this.fingers[i].note);
+    }
+  }
+};
 
 Hand.prototype.calculatePlayMode = function() {
 	if (this.hand.grabStrength >= 1 ) {
@@ -73,4 +178,8 @@ Hand.prototype.calculatePlayMode = function() {
 		this.threeObject.material.color.setHex(0x00ff00);
 		this.playMode = true; // ACTIVE
 	}
-}
+};
+
+Hand.prototype.reMap = function(value, low1, high1, low2, high2) {
+    return low2 + (value - low1) * (high2 - low2) / (high1 - low1);
+};

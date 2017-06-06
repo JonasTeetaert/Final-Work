@@ -1,3 +1,3 @@
-var Instrument = function() {
-	this.active = false;
+var Instrument = function(name) {
+
 }
