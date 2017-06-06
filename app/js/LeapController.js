@@ -30,19 +30,19 @@ var LeapController = function() {
         if (isHorizontal) {
           if (gesture.direction[0] > 0) {
             swipeDirection = "right";
-            if (gesture.state === 'stop' && gesture.handIds && typeof leftHand.hand !== "undefined" && typeof rightHand.hand !== "undefined") {
-              if (gesture.pointableIds[0] === leftHand.hand.fingers[1].id) { // als gesture id = handId : voer functie uit van dat hand
+            if (gesture.state === 'stop' && gesture.handIds) {
+              if (typeof leftHand.hand !== "undefined" &&  gesture.pointableIds[0] === leftHand.hand.fingers[1].id) { // als gesture id = handId : voer functie uit van dat hand
               	leftHand.previous();
-							} else if (gesture.pointableIds[0] === rightHand.hand.fingers[1].id) {
+							} else if (typeof rightHand.hand !== "undefined" && gesture.pointableIds[0] === rightHand.hand.fingers[1].id) {
               	rightHand.previous();
 							}
             }
           } else {
             swipeDirection = "left";
-            if (gesture.state === 'stop' && gesture.handIds && typeof leftHand.hand !== "undefined" && typeof rightHand.hand !== "undefined") {
-              if (gesture.pointableIds[0] === leftHand.hand.fingers[1].id) {
+            if (gesture.state === 'stop' && gesture.handIds) {
+              if (typeof leftHand.hand !== "undefined" && gesture.pointableIds[0] === leftHand.hand.fingers[1].id) {
 								leftHand.next();
-            	}else if (gesture.pointableIds[0] === rightHand.hand.fingers[1].id) {
+            	}else if (typeof rightHand.hand !== "undefined" && gesture.pointableIds[0] === rightHand.hand.fingers[1].id) {
                 rightHand.next();
               }
             }
