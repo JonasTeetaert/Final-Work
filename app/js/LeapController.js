@@ -12,7 +12,7 @@ var LeapController = function() {
 
 	//TODO: beter swipe detection (met wijsvinger?)
   this.controller.on("gesture", function (gesture) { //luister voor gestures
-    console.log(gesture, frame.hands);
+
     switch (gesture.type) {
       case "circle":
         //console.log("Circle Gesture");
@@ -30,19 +30,19 @@ var LeapController = function() {
         if (isHorizontal) {
           if (gesture.direction[0] > 0) {
             swipeDirection = "right";
-            if (gesture.state === 'stop' && gesture.handIds && leftHand.hand !== "undefined" && rightHand.hand !== "undefined") {
-              if (gesture.handIds[0] === leftHand.hand.id) { // als gesture id = handId : voer functie uit van dat hand
+            if (gesture.state === 'stop' && gesture.handIds && typeof leftHand.hand !== "undefined" && typeof rightHand.hand !== "undefined") {
+              if (gesture.pointableIds[0] === leftHand.hand.fingers[1].id) { // als gesture id = handId : voer functie uit van dat hand
               	leftHand.previous();
-							} else if (gesture.handIds[0] === rightHand.hand.id) {
+							} else if (gesture.pointableIds[0] === rightHand.hand.fingers[1].id) {
               	rightHand.previous();
 							}
             }
           } else {
             swipeDirection = "left";
-            if (gesture.state === 'stop' && gesture.handIds && leftHand.hand !== "undefined" && rightHand.hand !== "undefined") {
-              if (gesture.handIds[0] === leftHand.hand.id) {
+            if (gesture.state === 'stop' && gesture.handIds && typeof leftHand.hand !== "undefined" && typeof rightHand.hand !== "undefined") {
+              if (gesture.pointableIds[0] === leftHand.hand.fingers[1].id) {
 								leftHand.next();
-            	}else if (gesture.handIds[0] === rightHand.hand.id) {
+            	}else if (gesture.pointableIds[0] === rightHand.hand.fingers[1].id) {
                 rightHand.next();
               }
             }

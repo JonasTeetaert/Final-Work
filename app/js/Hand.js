@@ -51,6 +51,7 @@ Hand.prototype.clearInstrument = function() {
 };
 
 Hand.prototype.next = function() {
+  console.log('next');
   if (typeof this.currentInstr !== "undefined") { // als instrument aan staat, cycle door instrumenten
     if (this.currentInstr === instruments.length - 1) {
       this.currentInstr = 0;
@@ -71,6 +72,7 @@ Hand.prototype.next = function() {
 }
 
 Hand.prototype.previous = function() {
+  console.log('previous');
   if (typeof this.currentInstr !== "undefined") { //als instrument aan staat, cycle door instrumenten
     if (this.currentInstr === 0) {
       this.currentInstr = instruments.length - 1;
