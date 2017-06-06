@@ -115,7 +115,7 @@ Hand.prototype.update = function() {
     case 0: // geen vingers meer gedetecteerd: release all notes (geluid stopt, anders spelen ze door)
       this.active = false;
       if (this.hand) { // check for undefined (first frame)
-        this.releaseNotes();
+        this.releaseNotes(); // released noten als hand plots van scherm is
       }
       break;
     case 1:
@@ -130,7 +130,7 @@ Hand.prototype.update = function() {
       } else {
           this.active = false;
           if (this.hand) {
-            this.releaseNotes();
+            this.releaseNotes(); // released noten als hand plots van scherm is
             }
           }
       break;
@@ -162,7 +162,7 @@ Hand.prototype.calculatePos = function() {
 
 Hand.prototype.releaseNotes = function() {
   if (this.instrument) {
-    for (var i = 0; i < this.hand.fingers.length; i++) { // released noten als hand plots van scherm is
+    for (var i = 0; i < this.hand.fingers.length; i++) {
       this.instrument.triggerRelease(this.fingers[i].note);
     }
   }

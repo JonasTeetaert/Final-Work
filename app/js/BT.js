@@ -6,10 +6,11 @@ var BT = function(synth, notes, noteLength, loopLength) {
   this.synth = synth.toMaster();
   var synth = this.synth;
   this.part = new Tone.Part(function (time, note) {
+
     //the notes given as the second element in the array
     //will be passed in as the second argument
     synth.triggerAttackRelease(note, noteLength, time);
-  }, notes).start(0);
+  }, notes);
 
   this.part.loop = true;
   this.part.loopEnd = loopLength;

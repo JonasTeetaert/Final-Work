@@ -32,6 +32,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   Tone.Transport.start();
 
+  //TODO: meer en betere backingtracks voorzien
   BT1 = new BT(
     new Tone.PolySynth(3, Tone.AMSynth),
 		[["0m", "C3"], ["0m", "E3"], ["0m", "G3"],
@@ -42,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		"4m"
 	); // (synthNumber, array of notes, notelength, looplength)
 
-  BT1.play();
+  //BT1.play();
 
   menu = new Menu();
 
