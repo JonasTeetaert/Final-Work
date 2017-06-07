@@ -4,13 +4,12 @@
 var BT = function(synth, notes, noteLength, loopLength) {
   this.paused = true;
   this.synth = synth.toMaster();
-  var synth = this.synth;
   this.part = new Tone.Part(function (time, note) {
 
     //the notes given as the second element in the array
     //will be passed in as the second argument
-    synth.triggerAttackRelease(note, noteLength, time);
-  }, notes);
+    this.synth.triggerAttackRelease(note, noteLength, time);
+  }.bind(this), notes);// bind zodat this.synth naar juist object verwijst
 
   this.part.loop = true;
   this.part.loopEnd = loopLength;

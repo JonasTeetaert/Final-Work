@@ -20,6 +20,7 @@ var Finger = function(note, position, direction) {
 
   this.threeObject.position.x = this.position.x;
   this.threeObject.position.y = this.position.y;
+  this.threeObject.position.z = this.position.z;
   scene.add(this.threeObject);
 };
 
@@ -45,8 +46,8 @@ Finger.prototype.update = function(finger) {
 };
 
 Finger.prototype.calculatePos = function(finger) {
-  this.position.x = (finger.tipPosition[0] + 200)*(window.innerWidth/2 + window.innerWidth/2)/(200+200)-window.innerWidth/2;
-  this.position.y = (finger.tipPosition[1] - 100)*(window.innerHeight/2 + window.innerHeight/2)/(450-100)-window.innerHeight/2;
+  this.position.x = (finger.tipPosition[0] + 200)*(150)/(200+200)-75;
+  this.position.y = (finger.tipPosition[1] - 100)*(100)/(450-200)-75;
   this.threeObject.position.x = this.position.x;
   this.threeObject.position.y = this.position.y;
 };

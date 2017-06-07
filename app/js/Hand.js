@@ -23,15 +23,18 @@ var Hand = function(type) {
 	}
 	this.threeObject.position.x = this.position.x;
 	this.threeObject.position.y = this.position.y;
+  this.threeObject.position.z = this.position.z;
 	scene.add(this.threeObject);
 };
 
 Hand.prototype.setEffect = function(fx) {
+  this.effect? this.effect.dispose(): null;
   this.currentEffect = fx; // nummer van effect in de globale 'effects' array, als deze op undefined staat is effecten niet actief
   // currentEffect variable is nodig om de cyclen met swipes
 	this.clearInstrument(); // effecten en instrument niet samen bespeelbaar
   this.effect = effects[fx];
   this.effect ? Tone.Master.chain(this.effect) : null; // zet effect als chain in master. gooit vorige chain weg: gaat dus niet op 2 handen. weet nog niet wat er gebeurd als er 2 effecten worden ingesteld
+  console.log(this.effect);
 };
 
 Hand.prototype.clearEffect = function() {
@@ -108,8 +111,7 @@ Hand.prototype.updateFinger = function() { //detect trigger + updatefinger
 
 Hand.prototype.update = function() {
   // TODO: per effect moet er een ander value getracked worden anders ERROR
-  this.effect ? this.effect.frequency.value = this.reMap(this.position.y, -window.innerHeight/2, window.innerHeight/2, 0, 6000) : null;
-  this.effect ? console.log(this.effect.frequency.value) : null;
+  this.effect ? this.effect.wet.value = this.reMap(this.position.y, -50, 50, 0, 1) : null;
   if (!this.playMode) { // noten stoppen in menu mode
     this.releaseNotes();
   }
@@ -155,9 +157,9 @@ Hand.prototype.update = function() {
   }
 };
 
-Hand.prototype.calculatePos = function() {
-  this.position.x = (this.hand.palmPosition[0] + 200)*(window.innerWidth/2 + window.innerWidth/2)/(200+200)-window.innerWidth/2;
-  this.position.y = (this.hand.palmPosition[1] - 100)*(window.innerHeight/2 + window.innerHeight/2)/(450-100)-window.innerHeight/2;
+Hand.prototype.calculatePos = function() { //TODO: gebruikmaken van interaction box
+  this.position.x = (this.hand.palmPosition[0] + 200)*(75 + 75)/(200+200)-75;
+  this.position.y = (this.hand.palmPosition[1] - 100)*(100)/(450-200)-75;
 	this.threeObject.position.x = this.position.x;
 	this.threeObject.position.y = this.position.y;
 };
