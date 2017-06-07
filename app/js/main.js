@@ -13,8 +13,8 @@ document.addEventListener('DOMContentLoaded', function() {
 	];
 
 	effects = [
-	new Tone.Filter(300),
-	new Tone.Distortion(0.1),
+	new Tone.AutoFilter("4n"),
+	new Tone.Distortion(1),
 	new Tone.JCReverb(0.5),
 	new Tone.PingPongDelay("16n", 0.5)
 	];
@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	leftHand = new Hand('left');
 	rightHand = new Hand('right');
 
-	leftHand.setInstrument(1);
+	leftHand.setEffect(0);
 
 	rightHand.setInstrument(1);
 

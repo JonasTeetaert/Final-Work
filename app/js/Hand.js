@@ -109,8 +109,9 @@ Hand.prototype.updateFinger = function() { //detect trigger + updatefinger
 
 Hand.prototype.update = function() {
   // TODO: per effect moet er een ander value getracked worden anders ERROR
-  this.effect ? this.effect.frequency.value = this.reMap(this.position.y, -window.innerHeight/2, window.innerHeight/2, 0, 6000) : null;
-  this.effect ? console.log(this.effect.frequency.value) : null;
+  console.log(this.reMap(this.position.y, -50, 150, 0, 1));
+  this.effect ? this.effect.wet.value = this.reMap(this.position.y, -50, 150, 0, 1) : null;
+  this.effect ? console.log(this.effect.wet.value) : null;
   if (!this.playMode) { // noten stoppen in menu mode
     this.releaseNotes();
   }
@@ -156,9 +157,9 @@ Hand.prototype.update = function() {
   }
 };
 
-Hand.prototype.calculatePos = function() {
+Hand.prototype.calculatePos = function() { //TODO: gebruikmaken van interaction box
   this.position.x = (this.hand.palmPosition[0] + 200)*(75 + 75)/(200+200)-75;
-  this.position.y = (this.hand.palmPosition[1] - 100)*(100 -0)/(450-200)-75;
+  this.position.y = (this.hand.palmPosition[1] - 100)*(100)/(450-200)-75;
 	this.threeObject.position.x = this.position.x;
 	this.threeObject.position.y = this.position.y;
 	console.log(this.threeObject.position);
