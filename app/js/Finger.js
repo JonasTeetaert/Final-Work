@@ -50,5 +50,4 @@ Finger.prototype.calculatePos = function(finger) {
   this.position.y = (finger.tipPosition[1] - 100)*(100)/(450-200)-75;
   this.threeObject.position.x = this.position.x;
   this.threeObject.position.y = this.position.y;
-  console.log(this.threeObject.position);
 };
