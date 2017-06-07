@@ -1,7 +1,7 @@
 // Hand
 var Hand = function(type) {
 	// visual aspect
-	this.geometry = new THREE.BoxGeometry( 10, 10, 10);
+	this.geometry = new THREE.BoxGeometry( 5, 5, 5);
 	this.material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
 	this.threeObject = new THREE.Mesh( this.geometry, this.material );
 	this.type = type;

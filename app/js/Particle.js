@@ -8,7 +8,7 @@ var Particle = function(parent) {
 	this.parent.index++;
 
 	setTimeout(function() {
-		this.destroy();
+		//this.destroy();
 	}.bind(this), 10000);
 }
 

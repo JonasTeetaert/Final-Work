@@ -47,7 +47,9 @@ ThreeController.prototype.init = function() {
 
 ThreeController.prototype.render = function() {
 	this.cube.position.z += 20;
-	this.moveGrid(150,20,470,0xff00ff, 0x0000ff);
+
+	// move the grid
+	//this.moveGrid(150,20,470,0xff00ff, 0x0000ff);
 
 	this.renderer.render(scene, this.camera);
 }
