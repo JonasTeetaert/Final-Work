@@ -46,8 +46,8 @@ Finger.prototype.update = function(finger) {
 };
 
 Finger.prototype.calculatePos = function(finger) {
-  this.position.x = (finger.tipPosition[0] + 200)*(150)/(200+200)-75;
-  this.position.y = (finger.tipPosition[1] - 100)*(100)/(450-200)-75;
+  this.position.x = (finger.tipPosition[0] + 200)*(250)/(200+200)-250/2;
+  this.position.y = (finger.tipPosition[1] - 100)*(100)/(450-200)-50;
   this.threeObject.position.x = this.position.x;
   this.threeObject.position.y = this.position.y;
 };
