@@ -1,4 +1,4 @@
-var fps, threeController, leapController, leftHand, rightHand, menu, noteMap, frame, instruments, effects, activeEffects, scene; // frame globaal zette: kunnen  alle objecten er aan? bij elke update de globale frame object updaten
+var fps, threeController, leapController, leftHand, rightHand, menu, noteMap, frame, instruments, effects, scene; // frame globaal zette: kunnen  alle objecten er aan? bij elke update de globale frame object updaten
 
 document.addEventListener('DOMContentLoaded', function() {
 	console.log('main.js is loaded');
