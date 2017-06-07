@@ -37,6 +37,10 @@ h1 {
 	font-weight: normal;
 }
 
+p {
+	margin-bottom: 5px;
+}
+
 .menu {
 	position: absolute;
 	display: block;
@@ -46,6 +50,7 @@ h1 {
 .bg-sound { 
 	text-align: center;
 	display: block;
+	margin-bottom: 20px;
 }
 
 .hands {
@@ -78,8 +83,8 @@ li {
 
 .titel {
 	padding-top: 0;
-	padding-bottom: 0;
-	text-decoration: underline;
+	padding-bottom: 5px;
+	border-bottom: 1px solid #fff;
 }
 
 .active {
@@ -118,8 +123,18 @@ li {
 	}
 }
 
+.status--middle {
+	position: relative;
+	margin-bottom: 10px;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 12%;
+}
+
 .status--hover {
 	&:before {
 		width: 100%;
 	}
 }
+
+
