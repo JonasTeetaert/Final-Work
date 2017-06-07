@@ -51,6 +51,7 @@ Hand.prototype.clearInstrument = function() {
 };
 
 Hand.prototype.next = function() {
+  console.log('next');
   if (typeof this.currentInstr !== "undefined") { // als instrument aan staat, cycle door instrumenten
     if (this.currentInstr === instruments.length - 1) {
       this.currentInstr = 0;
@@ -71,6 +72,7 @@ Hand.prototype.next = function() {
 }
 
 Hand.prototype.previous = function() {
+  console.log('previous');
   if (typeof this.currentInstr !== "undefined") { //als instrument aan staat, cycle door instrumenten
     if (this.currentInstr === 0) {
       this.currentInstr = instruments.length - 1;
@@ -101,14 +103,13 @@ Hand.prototype.updateFinger = function() { //detect trigger + updatefinger
         // note releasen (afzetten) als vinger recht is en vorig frame niet
         this.instrument.triggerRelease(this.fingers[i].note);
       }
-
   }
 };
 
 Hand.prototype.update = function() {
   // TODO: per effect moet er een ander value getracked worden anders ERROR
-  //this.effect ? this.effect.frequency.value = this.reMap(this.position.y, -window.innerHeight/2, window.innerHeight/2, 0, 6000) : null;
-  //this.effect ? console.log(this.effect.frequency.value) : null;
+  this.effect ? this.effect.frequency.value = this.reMap(this.position.y, -window.innerHeight/2, window.innerHeight/2, 0, 6000) : null;
+  this.effect ? console.log(this.effect.frequency.value) : null;
   if (!this.playMode) { // noten stoppen in menu mode
     this.releaseNotes();
   }
@@ -116,7 +117,7 @@ Hand.prototype.update = function() {
     case 0: // geen vingers meer gedetecteerd: release all notes (geluid stopt, anders spelen ze door)
       this.active = false;
       if (this.hand) { // check for undefined (first frame)
-        this.releaseNotes();
+        this.releaseNotes(); // released noten als hand plots van scherm is
       }
       break;
     case 1:
@@ -131,7 +132,7 @@ Hand.prototype.update = function() {
       } else {
           this.active = false;
           if (this.hand) {
-            this.releaseNotes();
+            this.releaseNotes(); // released noten als hand plots van scherm is
             }
           }
       break;
@@ -163,7 +164,7 @@ Hand.prototype.calculatePos = function() {
 
 Hand.prototype.releaseNotes = function() {
   if (this.instrument) {
-    for (var i = 0; i < this.hand.fingers.length; i++) { // released noten als hand plots van scherm is
+    for (var i = 0; i < this.hand.fingers.length; i++) {
       this.instrument.triggerRelease(this.fingers[i].note);
     }
   }

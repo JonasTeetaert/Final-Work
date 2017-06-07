@@ -30,7 +30,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	rightHand.setInstrument(1);
 
-	menu = new Menu();
+	Tone.Transport.start();
 
-	window.requestAnimFrame(render);
+  //TODO: meer en betere backingtracks voorzien
+  BT1 = new BT(
+  	new Tone.PolySynth(3, Tone.AMSynth),
+  	[["0m", "C3"], ["0m", "E3"], ["0m", "G3"],
+  	["1m", "C3"], ["1m", "F3"], ["1m", "A3"],
+  	["2m", "D3"], ["2m", "G3"], ["2m", "B3"],
+  	["3m", "C3"], ["3m", "E3"], ["3m", "G3"]],
+  	"1m",
+  	"4m"
+	); // (synthNumber, array of notes, notelength, looplength)
+
+  //BT1.play();
+
+  menu = new Menu();
+
+  window.requestAnimFrame(render);
 });
