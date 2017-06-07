@@ -158,8 +158,8 @@ Hand.prototype.update = function() {
 };
 
 Hand.prototype.calculatePos = function() { //TODO: gebruikmaken van interaction box
-  this.position.x = (this.hand.palmPosition[0] + 200)*(75 + 75)/(200+200)-75;
-  this.position.y = (this.hand.palmPosition[1] - 100)*(100)/(450-200)-75;
+  this.position.x = (this.hand.palmPosition[0] + 200)*(250)/(200+200)-250/2;
+  this.position.y = (this.hand.palmPosition[1] - 100)*(100)/(450-200)-50;
 	this.threeObject.position.x = this.position.x;
 	this.threeObject.position.y = this.position.y;
 };
