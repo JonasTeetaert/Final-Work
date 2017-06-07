@@ -10,7 +10,7 @@ var LeapController = function() {
 
 	this.controller.connect();
 
-	//TODO: beter swipe detection (met wijsvinger?)
+	//swipen werkt best methand horizontaal en vingers gestrekt (anders zijn de vingers niet genoeg getecteerd)
   this.controller.on("gesture", function (gesture) { //luister voor gestures
 
     switch (gesture.type) {
