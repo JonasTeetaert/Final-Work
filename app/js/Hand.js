@@ -23,6 +23,7 @@ var Hand = function(type) {
 	}
 	this.threeObject.position.x = this.position.x;
 	this.threeObject.position.y = this.position.y;
+  this.threeObject.position.z = this.position.z;
 	scene.add(this.threeObject);
 };
 
@@ -156,10 +157,12 @@ Hand.prototype.update = function() {
 };
 
 Hand.prototype.calculatePos = function() {
-  this.position.x = (this.hand.palmPosition[0] + 200)*(window.innerWidth/2 + window.innerWidth/2)/(200+200)-window.innerWidth/2;
-  this.position.y = (this.hand.palmPosition[1] - 100)*(window.innerHeight/2 + window.innerHeight/2)/(450-100)-window.innerHeight/2;
+  this.position.x = (this.hand.palmPosition[0] + 200)*(75 + 75)/(200+200)-75;
+  this.position.y = (this.hand.palmPosition[1] - 100)*(100 -0)/(450-200)-75;
 	this.threeObject.position.x = this.position.x;
 	this.threeObject.position.y = this.position.y;
+	console.log(this.threeObject.position);
+
 };
 
 Hand.prototype.releaseNotes = function() {
