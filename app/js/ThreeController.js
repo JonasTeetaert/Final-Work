@@ -36,17 +36,17 @@ ThreeController.prototype.init = function() {
 	this.drawGrid(150,20,470,0xff00ff, 0x0000ff);
 
 	// cube
-	var geometry = new THREE.BoxGeometry( 10, 10, 10);
+	var geometry = new THREE.BoxGeometry( 4, 4, 4);
 	var material = new THREE.MeshBasicMaterial( { color: 0xffffff } );
 	this.cube = new THREE.Mesh(geometry, material);
-
-	this.cube.position.set(0,100,this.planeFar); 
+	//this.cube.position.set(0,100,this.planeFar); 
+	this.cube.position.set(-100,73,0);
 	scene.add(this.cube);
 
 }
 
 ThreeController.prototype.render = function() {
-	this.cube.position.z += 20;
+	//this.cube.position.z += 20;
 
 	// move the grid
 	//this.moveGrid(150,20,470,0xff00ff, 0x0000ff);

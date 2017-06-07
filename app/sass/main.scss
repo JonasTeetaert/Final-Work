@@ -1,4 +1,125 @@
+@import 'font-awesome/font-awesome';
+
+@font-face {
+	font-family: 'Byom';
+	src: url('../assets/fonts/Byom-Regular-Trial.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+
 body {
 	margin: 0;
 	overflow: hidden;
+	color: #fff;
+	font-family: 'Byom', sans-serif;
+	box-sizing: border-box;
+}
+
+* {
+    box-sizing: inherit;
+
+    &:before,
+    &:after {
+        box-sizing: inherit;
+    }
+}
+
+ul {
+	padding: 0;
+	list-style: none;
+}
+
+
+h1 {
+	font-size: 1em;
+	text-align: center;
+	margin: 0;
+	font-weight: normal;
+}
+
+.menu {
+	position: absolute;
+	display: block;
+	width: 100%;
+}
+
+.bg-sound { 
+	text-align: center;
+	display: block;
+}
+
+.hands {
+	display: block;
+	padding: 30px;
+}
+
+.effects,
+.instruments,
+.right-hand,
+.left-hand {
+	width: 50%;
+	float: left;
+}
+
+.effects,
+.instruments {
+	padding: 0 20px;
+}
+
+.instruments {
+	text-align: right;
+}
+
+
+li {
+	padding: 40px 0;
+	position: relative;
+}
+
+.titel {
+	padding-top: 0;
+	padding-bottom: 0;
+	text-decoration: underline;
+}
+
+.active {
+	color: #00ff00;
+}
+
+.status {
+	position: absolute;
+	left: 0;
+	margin-top: 5px;
+	width: 50%;
+	height: 10px;
+	border: 1px solid #fff;
+	border-radius: 1px;
+
+	&:before {
+		content: "";
+		position: absolute;
+		left: 0;
+		top: 0;
+		width: 0;
+		height: 100%;
+		background-color: #fff;
+		transition: width 5s ease-in-out;
+	}
+}
+
+.status--right {
+	position: absolute;
+	right: 0;
+	left: initial;
+
+	&:before {
+		right: 0;
+		left: initial;
+	}
+}
+
+.status--hover {
+	&:before {
+		width: 100%;
+	}
 }

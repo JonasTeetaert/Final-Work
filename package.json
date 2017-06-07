@@ -1,11 +1,8 @@
 {
-  "name": "gecko",
-  "version": "0.0.1",
-  "description": "A repo to be used as a sub module/tree for adding the Materialize framework along with Gulp to any project",
-  "main": "index.js",
-  "scripts": {
-    "start": "node index.js"
-  },
+  "name": "leap_music",
+  "version": "1.0.0",
+  "description": "An application for making music with hand movements",
+  "main": "gulpfile.js",
   "devDependencies": {
     "browser-sync": "^2.11.1",
     "gulp": "^3.9.1",
@@ -23,17 +20,17 @@
     "run-sequence": "^1.1.5",
     "sassdoc": "^2.1.20"
   },
-  "engines": {
-    "node": "4.0.0"
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/nilssanderson/gecko"
+    "url": "git+https://github.com/JonasTeetaert/Final-Work.git"
   },
-  "keywords": [],
-  "author": "Nils Sanderson",
-  "contributors": [
-    "Nils Sanderson <n_sanderson12@msn.com> (http://nilssanderson.com)"
-  ],
-  "license": "MIT"
+  "author": "Dries Cruyskens & Jonas Teetaert",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JonasTeetaert/Final-Work/issues"
+  },
+  "homepage": "https://github.com/JonasTeetaert/Final-Work#readme"
 }
