@@ -1,6 +1,5 @@
 // Menu
 var Menu = function() {
-	this.scene = threeController.scene;
 	this.rows = 6;
 	this.left = -window.innerWidth/2;
 	this.top = window.innerHeight/2 - window.innerHeight/ (this.rows * 2);
@@ -12,15 +11,15 @@ var Menu = function() {
 };
 
 Menu.prototype.init = function() {
-	this.bgSound = new MenuItem(this.scene, window.innerWidth, this.menuItemHeight, 0, this.top);
+	this.bgSound = new MenuItem(scene, window.innerWidth, this.menuItemHeight, 0, this.top);
 
 	for (var i = 1; i <= effects.length; i++) {
-		this.leftHandMenuItems.push(new MenuItem(this.scene, this.menuItemWidth, this.menuItemHeight, this.left +  this.menuItemWidth/2, this.top - this.menuItemHeight * i+1));
+		this.leftHandMenuItems.push(new MenuItem(scene, this.menuItemWidth, this.menuItemHeight, this.left +  this.menuItemWidth/2, this.top - this.menuItemHeight * i+1));
     this.rightHandMenuItems.push(new MenuItem(this.scene, this.menuItemWidth, this.menuItemHeight, this.menuItemWidth/2 , this.top - this.menuItemHeight * i+1));
 	}
 	for (var i = 1; i <= instruments.length; i++) {
-		this.leftHandMenuItems.push(new MenuItem(this.scene, this.menuItemWidth, this.menuItemHeight, this.left + 3*this.menuItemWidth/2, this.top - this.menuItemHeight * i+1));
-    this.rightHandMenuItems.push(new MenuItem(this.scene, this.menuItemWidth, this.menuItemHeight, 3/2 * this.menuItemWidth, this.top - this.menuItemHeight * i+1));
+		this.leftHandMenuItems.push(new MenuItem(scene, this.menuItemWidth, this.menuItemHeight, this.left + 3*this.menuItemWidth/2, this.top - this.menuItemHeight * i+1));
+    this.rightHandMenuItems.push(new MenuItem(scene, this.menuItemWidth, this.menuItemHeight, 3/2 * this.menuItemWidth, this.top - this.menuItemHeight * i+1));
 	}
 };
 
@@ -61,7 +60,7 @@ Menu.prototype.checkPlayMode = function() { // checkplaymode in handobject?
 
 
 
-var MenuItem = function(scene, width, height, x, y) {
+var MenuItem = function(width, height, x, y) {
 	this.width = width;
 	this.height = height;
 	this.geometry = new THREE.PlaneGeometry(width, height, 0);

@@ -23,7 +23,7 @@ var Hand = function(type) {
 	}
 	this.threeObject.position.x = this.position.x;
 	this.threeObject.position.y = this.position.y;
-	threeController.scene.add(this.threeObject);
+	scene.add(this.threeObject);
 };
 
 Hand.prototype.setEffect = function(fx) {
