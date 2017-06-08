@@ -3,7 +3,7 @@
  */
 var BT = function(synth, notes, noteLength, loopLength) {
   this.paused = true;
-  this.synth = synth.connect(limiter);
+  /*this.synth = synth.connect(limiter);
   this.part = new Tone.Part(function (time, note) {
 
     //the notes given as the second element in the array
@@ -12,7 +12,7 @@ var BT = function(synth, notes, noteLength, loopLength) {
   }.bind(this), notes);// bind zodat this.synth naar juist object verwijst
 
   this.part.loop = true;
-  this.part.loopEnd = loopLength;
+  this.part.loopEnd = loopLength;*/
   //this.synth.send("limiter", 0);
 
   // sampler voor eenvoudige kick, wordt later nog uitgebreide percussie
@@ -23,14 +23,21 @@ var BT = function(synth, notes, noteLength, loopLength) {
 
     // Tone.Transport.start();
   }).toMaster();*/
+
 };
 
 BT.prototype.play = function() {
   this.paused = false;
-  this.part.start();
+  this.kickPart.start();
+  this.snarePart.start();
+  this.hastLoop.start("1m");
+  this.bassPart.start();
 };
 
 BT.prototype.pause = function() {
   this.paused = true;
-  this.part.stop();
+  this.kickPart.stop();
+  this.snarePart.stop();
+  this.hastLoop.stop();
+  this.bassPart.stop();
 };

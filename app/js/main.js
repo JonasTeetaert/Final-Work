@@ -3,7 +3,6 @@ var fps, threeController, leapController, leftHand, rightHand, menu, noteMap, fr
 document.addEventListener('DOMContentLoaded', function() {
 	console.log('main.js is loaded');
 	fps = new FPS(60);
-  Tone.Transport.start();
 	noteMap = ['C5', 'D5', 'E5', 'F5', 'G5', 'A5', 'B5', 'C6', 'D6', 'E6'];
 
 	limiter = new Tone.Limiter(-6).receive("limiter");
@@ -45,9 +44,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	rightHand.setInstrument(0);
 
-  BT1.play();
+  //BT1.play();
 
   menu = new Menu();
+
+  //Tone.Transport.start();
 
   window.requestAnimFrame(render);
 });
