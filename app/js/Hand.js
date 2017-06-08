@@ -3,28 +3,35 @@ var Hand = function(type) {
 	// visual aspect
 	this.geometry = new THREE.BoxGeometry( 5, 5, 5);
 	this.material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-	this.threeObject = new THREE.Mesh( this.geometry, this.material );
+	this.mesh = new THREE.Mesh( this.geometry, this.material );
+  this.boxCollider = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());
+
 	this.type = type;
 	this.speed = 2.5; // hoe rap je de hand beweegt
 	this.playMode = true; // true = ACTIVE, false = MENU
 	this.fingers = [];
 	this.position = new THREE.Vector3(0, 0, 0);
-	this.active = false; // hand gedetecteed: true, anders false.  gebruiken voor visuals?
+	this.active = false; // hand gedetecteerd: true, anders false.  gebruiken voor visuals?
 
 	if (this.type == 'left') {
     for (var i = 0; i < 5; i++) {
       this.fingers[i] = new Finger(noteMap[4 - i]);
     }
-	} 
-	if (this.type == 'right') {
+    // HTML Access
+    this.handMenu = new HandMenu(this);
+  } 
+  if (this.type == 'right') {
     for (var i = 0; i < 5; i++) {
       this.fingers[i] = new Finger(noteMap[5 + i]);
     }
-	}
-	this.threeObject.position.x = this.position.x;
-	this.threeObject.position.y = this.position.y;
-  this.threeObject.position.z = this.position.z;
-	scene.add(this.threeObject);
+    // HTML Access
+    this.handMenu = new HandMenu(this);
+  }
+  this.mesh.position.x = this.position.x;
+  this.mesh.position.y = this.position.y;
+  this.mesh.position.z = this.position.z;
+  scene.add(this.mesh);
+
 };
 
 Hand.prototype.setEffect = function(fx) {
@@ -32,7 +39,7 @@ Hand.prototype.setEffect = function(fx) {
   this.currentEffect = fx; // nummer van effect in de globale 'effects' array, als deze op undefined staat is effecten niet actief
   // currentEffect variable is nodig om de cyclen met swipes
 	this.clearInstrument(); // effecten en instrument niet samen bespeelbaar
-  this.effect = effects[fx];
+  this.effect = effects[fx].fx;
   this.effect ? Tone.Master.chain(this.effect) : null; // zet effect als chain in master. gooit vorige chain weg: gaat dus niet op 2 handen. weet nog niet wat er gebeurd als er 2 effecten worden ingesteld
   console.log(this.effect);
 };
@@ -45,7 +52,7 @@ Hand.prototype.clearEffect = function() {
 Hand.prototype.setInstrument = function(instr) {
   this.currentInstr = instr;  // nummer van huidig instrument in globale 'instruments' array, undefined: geen instr maar een effect toegewezen
   this.clearEffect(); // effecten en instrument niet samen bespeelbaar
-  this.instrument = instruments[instr].toMaster(); // connect instr to master (masterchain met effect komt hierna)
+  this.instrument = instruments[instr].instrument.toMaster(); // connect instr to master (masterchain met effect komt hierna)
 };
 
 Hand.prototype.clearInstrument = function() {
@@ -106,10 +113,13 @@ Hand.prototype.updateFinger = function() { //detect trigger + updatefinger
         // note releasen (afzetten) als vinger recht is en vorig frame niet
         this.instrument.triggerRelease(this.fingers[i].note);
       }
-  }
-};
+    }
+  };
 
-Hand.prototype.update = function() {
+  Hand.prototype.update = function() {
+  // update collisionBoxPos;
+  this.boxCollider.setFromObject(this.mesh);
+  this.handMenu.update();
   // TODO: per effect moet er een ander value getracked worden anders ERROR
   this.effect ? this.effect.wet.value = this.reMap(this.position.y, -50, 50, 0, 1) : null;
   if (!this.playMode) { // noten stoppen in menu mode
@@ -117,12 +127,12 @@ Hand.prototype.update = function() {
   }
   switch (frame.hands.length) {
     case 0: // geen vingers meer gedetecteerd: release all notes (geluid stopt, anders spelen ze door)
-      this.active = false;
+    this.active = false;
       if (this.hand) { // check for undefined (first frame)
         this.releaseNotes(); // released noten als hand plots van scherm is
       }
       break;
-    case 1:
+      case 1:
       if (frame.hands[0].type === this.type) { // 1 hand en vingers zijn gedetecteerd en actief
         this.hand = frame.hands[0];
         this.active = true;
@@ -132,14 +142,14 @@ Hand.prototype.update = function() {
         this.calculatePos();
         this.calculatePlayMode();
       } else {
-          this.active = false;
-          if (this.hand) {
+        this.active = false;
+        if (this.hand) {
             this.releaseNotes(); // released noten als hand plots van scherm is
-            }
           }
-      break;
-    case 2:
-      for (var i = 0; i < frame.hands.length; i++) {
+        }
+        break;
+        case 2:
+        for (var i = 0; i < frame.hands.length; i++) {
         if (frame.hands[i].type === this.type) { // 2 handen en vingers zijn gedetecteerd en actief
           this.hand = frame.hands[i];
           this.active = true;
@@ -151,17 +161,18 @@ Hand.prototype.update = function() {
         }
       }
       break;
-		default:
-			this.active = false;
-			break;
-  }
-};
+      default:
+      this.active = false;
+      break;
+    }
+  };
+
 
 Hand.prototype.calculatePos = function() { //TODO: gebruikmaken van interaction box
   this.position.x = (this.hand.palmPosition[0] + 200)*(250)/(200+200)-250/2;
   this.position.y = (this.hand.palmPosition[1] - 100)*(100)/(450-200)-50;
-	this.threeObject.position.x = this.position.x;
-	this.threeObject.position.y = this.position.y;
+  this.mesh.position.x = this.position.x;
+  this.mesh.position.y = this.position.y;
 };
 
 Hand.prototype.releaseNotes = function() {
@@ -174,15 +185,15 @@ Hand.prototype.releaseNotes = function() {
 
 Hand.prototype.calculatePlayMode = function() {
 	if (this.hand.grabStrength >= 1 ) {
-		this.threeObject.material.color.setHex(0xff0000);
+		this.mesh.material.color.setHex(0xff0000);
 		this.playMode = false; // MENU
 
 	} else {
-		this.threeObject.material.color.setHex(0x00ff00);
+		this.mesh.material.color.setHex(0x00ff00);
 		this.playMode = true; // ACTIVE
 	}
 };
 
 Hand.prototype.reMap = function(value, low1, high1, low2, high2) {
-    return low2 + (value - low1) * (high2 - low2) / (high1 - low1);
+  return low2 + (value - low1) * (high2 - low2) / (high1 - low1);
 };
