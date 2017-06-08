@@ -3,7 +3,7 @@
  */
 var BT = function(synth, notes, noteLength, loopLength) {
   this.paused = true;
-  this.synth = synth.toMaster();
+  this.synth = synth;
   this.part = new Tone.Part(function (time, note) {
 
     //the notes given as the second element in the array
@@ -13,6 +13,7 @@ var BT = function(synth, notes, noteLength, loopLength) {
 
   this.part.loop = true;
   this.part.loopEnd = loopLength;
+  this.synth.send("limiter", 0);
 
   // sampler voor eenvoudige kick, wordt later nog uitgebreide percussie
   /*sampler = new Tone.Sampler("http://localhost:8888/final%20work/leapMusic/build/samples/kick.wav", function () {
