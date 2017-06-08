@@ -24,6 +24,8 @@ var BT = function(synth, notes, noteLength, loopLength) {
     // Tone.Transport.start();
   }).toMaster();*/
 
+  
+
 };
 
 BT.prototype.play = function() {

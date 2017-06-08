@@ -22,6 +22,8 @@ document.addEventListener('DOMContentLoaded', function() {
 		new Effect(new Tone.PingPongDelay("16n",0.7), 'PingPongDelay'),
 	];
 
+	console.log(effects[1]);
+
 	leapController = new LeapController();
 	threeController = new ThreeController();
 
