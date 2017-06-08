@@ -117,7 +117,6 @@ li {
 		width: 0;
 		height: 100%;
 		background-color: #fff;
-		transition: width 5s ease-in-out;
 	}
 }
 
@@ -143,6 +142,7 @@ li {
 .status--hover {
 	&:before {
 		width: 100%;
+		transition: width 2s ease-in;
 	}
 }
 

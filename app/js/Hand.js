@@ -12,6 +12,7 @@ var Hand = function(type) {
 	this.fingers = [];
 	this.position = new THREE.Vector3(0, 0, 0);
 	this.active = false; // hand gedetecteerd: true, anders false.  gebruiken voor visuals?
+  this.oneTimeBool = true;
 
 	if (this.type == 'left') {
     for (var i = 0; i < 5; i++) {
@@ -31,7 +32,6 @@ var Hand = function(type) {
   this.mesh.position.y = this.position.y;
   this.mesh.position.z = this.position.z;
   scene.add(this.mesh);
-
 };
 
 Hand.prototype.setEffect = function(fx) {
@@ -120,6 +120,7 @@ Hand.prototype.updateFinger = function() { //detect trigger + updatefinger
   // update collisionBoxPos;
   this.boxCollider.setFromObject(this.mesh);
   this.handMenu.update();
+
   // TODO: per effect moet er een ander value getracked worden anders ERROR
   this.effect ? this.effect.wet.value = this.reMap(this.position.y, -50, 50, 0, 1) : null;
   if (!this.playMode) { // noten stoppen in menu mode
@@ -188,10 +189,21 @@ Hand.prototype.calculatePlayMode = function() {
 		this.mesh.material.color.setHex(0xff0000);
 		this.playMode = false; // MENU
 
+    if (this.oneTimeBool) {
+       this.handMenu.on();
+       this.oneTimeBool = false;
+    }
+
 	} else {
 		this.mesh.material.color.setHex(0x00ff00);
 		this.playMode = true; // ACTIVE
-	}
+
+    if (!this.oneTimeBool) {
+       this.handMenu.off();
+       this.oneTimeBool = true;
+    }
+
+  }
 };
 
 Hand.prototype.reMap = function(value, low1, high1, low2, high2) {
