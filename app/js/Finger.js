@@ -27,7 +27,7 @@ var Finger = function(note, position, direction) {
 Finger.prototype.update = function(finger) {
   this.direction = finger.direction[1];
   this.calculatePos(finger);
-
+  //TODO: geen absolute direction maar vergelijken met palm direction zodat hand niet per se recht moet gehouden worden?
   if (((Math.round(this.direction * 100) / 100) <= -0.4)) {
     if (this.isDown === false) {
       this.wasDown = false;
