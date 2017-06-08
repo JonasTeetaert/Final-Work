@@ -101,8 +101,8 @@ gulp.task('javascript', function() {
 // =============================================================================
 gulp.task('images', function() {
     return gulp
-        .src(srcPath + '/assets/images/**/*')
-        .pipe(gulp.dest(buildPath + '/assets/images'));
+        .src(srcPath + '/assets/samples/**/*')
+        .pipe(gulp.dest(buildPath + '/assets/samples'));
 });
 
 // =============================================================================
@@ -114,7 +114,6 @@ gulp.task('fonts', function() {
         .pipe(gulp.dest(buildPath + '/assets/fonts'));
 });
 
-
 // =============================================================================
 // Build the buildPath folder by running all of the above tasks
 // =============================================================================
@@ -124,7 +123,7 @@ gulp.task('build', function(done) {
         'fonts',
         'javascript',
         'images',
-        'html'
+        'html',
     ], done);
 });
 
