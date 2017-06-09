@@ -120,7 +120,6 @@ Hand.prototype.updateFinger = function() { //detect trigger + updatefinger
   // update collisionBoxPos;
   this.boxCollider.setFromObject(this.mesh);
   this.handMenu.update();
-  // TODO: per effect moet er een ander value getracked worden anders ERROR
   this.effect && this.effect.wet ? this.effect.wet.value = this.reMap(this.position.y, -50, 50, 1, 0) : null;
   if (!this.playMode) { // noten stoppen in menu mode
     this.releaseNotes();

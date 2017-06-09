@@ -40,11 +40,12 @@ document.addEventListener('DOMContentLoaded', function() {
 	leftHand = new Hand('left');
 	rightHand = new Hand('right');
 
-	leftHand.setEffect(0);
+	leftHand.setInstrument(0);
 
 	rightHand.setInstrument(0);
 
-  //TODO: meer en betere backingtracks voorzien
+  Tone.Master.chain(limiter);
+
   BT1 = new BT(115);
 
   BT1.play();

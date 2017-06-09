@@ -8,9 +8,6 @@ function render() {
     leftHand.update();
     rightHand.update();
     // menu.checkPlayMode();
-    // TODO: warning bij effect op elk hand?
-    // TODO: bij 2 verschillende instrumenten die tezamen gespeeld worden: gain te hoog 'gekraak'
-
   }
   threeController.render();
   window.requestAnimFrame(render);
