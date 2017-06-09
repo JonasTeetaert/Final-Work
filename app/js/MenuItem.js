@@ -65,14 +65,24 @@ MenuItem.prototype.on = function() {
 	this.active = true;
 	this.mesh.material.opacity = 0;
 	this.node.classList.add('active');
-	if (this.handMenu.currentActiveItem != undefined) {
-		for ( var i = 0; < this.handMenu.effects.length; i++) {
-			if (this.handMenu.effects[i].)
-		}
+	
+	if (this.type == 'effect') {
+		this.hand.releaseNotes();
+		this.hand.setEffect(this.index);
 	}
+
+	if (this.type == 'instrument') {
+		this.hand.releaseNotes();
+		this.hand.setInstrument(this.index);
+	}
+
+	this.handMenu.previousActiveItem = this.handMenu.currentActiveItem;
 	this.handMenu.currentActiveItem = this;
-	
-	
+
+	if (this.handMenu.previousActiveItem != undefined) {
+		this.handMenu.previousActiveItem.off();
+	}
+
 };
 
 MenuItem.prototype.off = function () {
@@ -91,11 +101,11 @@ MenuItem.prototype.collisionUpdate = function() {
 
 		this.deltaTime = Date.now() - this.startHoverTime;
 
-		if (this.deltaTime >= 2000) { // end hover
+		if (this.deltaTime >= 1000) { // end hover
 			this.on();
 			this.startHoverTime = null;
 		} else {
-			if (!this.active) {
+			if (this.active) {
 				this.off();
 			}
 		}

@@ -35,10 +35,10 @@ document.addEventListener('DOMContentLoaded', function() {
 	leftHand = new Hand('left');
 	rightHand = new Hand('right');
 
-	leftHand.setEffect(0);
-
-	rightHand.setInstrument(1);
-
+	//leftHand.setEffect(0);
+	//rightHand.setInstrument(1);
+	rightHand.handMenu.instruments[0].on();
+	leftHand.handMenu.effects[0].on();
 	var date = new Date();
 	console.log('sec' + date.getSeconds());
 

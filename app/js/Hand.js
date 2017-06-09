@@ -67,16 +67,18 @@ Hand.prototype.next = function() {
     } else {
       this.currentInstr++;
     }
-    this.releaseNotes();
-    this.setInstrument(this.currentInstr);
+    /*this.releaseNotes();
+    this.setInstrument(this.currentInstr);*/
+    this.handMenu.instruments[this.currentInstr].on();
   } else if (typeof this.currentEffect !== "undefined") { // als effect aan staat, cycledoor effecten
     if (this.currentEffect === effects.length - 1) {
       this.currentEffect = 0;
     } else {
       this.currentEffect++;
     }
-    this.releaseNotes();
-    this.setEffect(this.currentEffect);
+    /*this.releaseNotes();
+    this.setEffect(this.currentEffect);*/
+    this.handMenu.effects[this.currentEffect].on();
   }
 }
 
@@ -88,16 +90,18 @@ Hand.prototype.previous = function() {
     } else {
       this.currentInstr--;
     }
-    this.releaseNotes();
-    this.setInstrument(this.currentInstr);
+   /* this.releaseNotes();
+    this.setInstrument(this.currentInstr);*/
+    this.handMenu.instruments[this.currentInstr].on();
   } else if (typeof this.currentEffect !== "undefined") { // als effect aanstaat, cycle door effecten
     if (this.currentEffect === 0) {
       this.currentEffect = effects.length - 1;
     } else {
       this.currentEffect--;
     }
-    this.releaseNotes();
-    this.setEffect(this.currentEffect);
+    /*this.releaseNotes();
+    this.setEffect(this.currentEffect);*/
+    this.handMenu.effects[this.currentEffect].on();
   }
 }
 

@@ -8,19 +8,30 @@ var Menu = function(nodeSelector) {
 	this.leftHandMenuItems = [];
 	this.rightHandMenuItems = [];
 
-	this.init();
+	this.BTNode = this.node.querySelector('.icon-bgSound');
+	this.BTactive = false;
+	
+	document.addEventListener("keydown", this.toggleBT.bind(this), false);
 };
 
-Menu.prototype.init = function() {
 
-	// bg-sound
-	this.bgSound = new MenuItem(0,90);
-	this.bgSound.setIcon('.icon-bgSound');
+Menu.prototype.toggleBT = function (e) {
+	if (e.keyCode == 32) { // space
+		if (!this.BTactive) {
+			this.BTNode.classList.remove('fa-volume-off');
+			this.BTNode.classList.add('fa-volume-up');
+			this.BTactive = true;
+		} else {
+			this.BTNode.classList.remove('fa-volume-up');
+			this.BTNode.classList.add('fa-volume-off');
+			this.BTactive = false;
+		}
+	}
+} 
 
-};
 
 // Hand Menu
-var HandMenu = function(Hand) {
+var HandMenu = function(Hand, bgSound) {
 	this.hand = Hand;
 	if (this.hand.type == 'left') {
 		this.node = menu.node.querySelector('.left-hand');
@@ -105,7 +116,6 @@ HandMenu.prototype.on = function() {
 
 HandMenu.prototype.off = function() {
 	this.node.style.opacity = 0;
-
 	for (var i=0; i < this.instruments.length; i++) {
 		this.instruments[i].material.opacity = 0;
 	}

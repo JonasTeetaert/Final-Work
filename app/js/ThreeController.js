@@ -1,7 +1,12 @@
 // Three Controller
 var ThreeController = function() {
 	scene = new THREE.Scene();
-	this.bottom = -window.innerHeight/2;
+	this.size = 800; // grote van de three ruimte
+	this.density = 100; // dichtheid van de particles
+	this.minX = -this.size;
+	this.maxX = this.size;
+	this.minY = -this.size;
+	this.maxY = this.size;
 	this.planeFar = -2000;
 	this.zOutofBounds = 200;
 	this.globalSpeed = 20;
@@ -33,13 +38,24 @@ ThreeController.prototype.init = function() {
 	this.camera.position.set(0, 30, 200);
 
 	// grid
-	this.drawGrid(150,20,470,0xff00ff, 0x0000ff);
+	this.initGrid(150,20,470,0xff00ff, 0x0000ff);
+
+	//particles 
+	this.particles = new Object();
+	this.particles.array = {};
+	this.particles.index = 0;
+	//this.particleMaterial = new THREE.LineBasicMaterial({color: 0xffffff});
+	this.particleMaterial = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+	this.particleLength = 10;
 
 }
 
 ThreeController.prototype.render = function() {
-	// move the grid
-	//this.moveGrid(150,20,470,0xff00ff, 0x0000ff);
+	// draw the grid
+	this.drawGrid(150,20,470,0xff00ff, 0x0000ff);
+
+	// draw particles
+	this.drawParticles();
 
 	this.renderer.render(scene, this.camera);
 }
@@ -50,7 +66,7 @@ ThreeController.prototype.onWindowResize = function() {
 	this.renderer.setSize( window.innerWidth, window.innerHeight );
 }
 
-ThreeController.prototype.drawGrid = function(size, divisions, depth, color1, color2) {
+ThreeController.prototype.initGrid = function(size, divisions, depth, color1, color2) {
 	// vertical lines
 	this.grid = new Object();
 	this.grid.material = new THREE.LineBasicMaterial({
@@ -102,15 +118,15 @@ ThreeController.prototype.drawGrid = function(size, divisions, depth, color1, co
 }
 
 
-ThreeController.prototype.moveGrid = function(size, divisions, depth, color1, color2, material) {
+ThreeController.prototype.drawGrid = function(size, divisions, depth, color1, color2, material) {
 	this.counter++;
 	if (this.counter >= divisions/2) {
 		var line = new Particle(this.grid);
 		line.material = this.grid.material;
 		line.geometry = new THREE.Geometry();
 		line.geometry.vertices.push(
-			new THREE.Vector3(-size/2, 0, -depth + this.zOutofBounds),
-			new THREE.Vector3(size/2, 0, -depth + this.zOutofBounds),
+			new THREE.Vector3(-size/2, 0, -depth - 4 + this.zOutofBounds),
+			new THREE.Vector3(size/2, 0, -depth - 4 + this.zOutofBounds),
 			);
 		line.geometry.colors.push(
 			new THREE.Color(color1),
@@ -123,7 +139,30 @@ ThreeController.prototype.moveGrid = function(size, divisions, depth, color1, co
 	}
 
 	for (var i in this.grid.array) {
-		this.grid.array[i].move(3);
+		this.grid.array[i].move(1);
 	}
 
+}
+
+ThreeController.prototype.drawParticles = function() {
+	for (var i = 0; i < this.density; i++) {
+		if (Math.random() > 0.97) { 
+			var particle = new Particle(this.particles);
+			particle.x = Math.floor(Math.random() * (this.maxX - this.minX)) + this.minX;
+			particle.y = Math.floor(Math.random() * (this.maxY - this.minY)) + this.minY;
+			particle.material = new THREE.MeshBasicMaterial( { color: 0xffffff } );
+			particle.geometry = new THREE.BoxGeometry( 1, 1, 20);
+			/*particle.geometry = new THREE.Geometry();
+			particle.geometry.vertices.push(
+				new THREE.Vector3(particle.x, particle.y, this.planeFar),
+				new THREE.Vector3(particle.x, particle.y, this.planeFar - this.particleLength),
+				);*/
+			particle.threeObject = new THREE.Mesh(particle.geometry, particle.material);
+			particle.threeObject.position.set(particle.x, particle.y, this.planeFar);
+			scene.add(particle.threeObject);
+		}
+	}
+	for (var i in this.particles.array) {
+		this.particles.array[i].move(20);
+	}
 }
