@@ -39,6 +39,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		leapController = new LeapController();
 		threeController = new ThreeController();
 
+
 	// menu moet voor handen geïnitialiseerd worden
 	menu = new Menu('.menu');
 
