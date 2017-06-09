@@ -35,14 +35,12 @@ var Hand = function(type) {
 };
 
 Hand.prototype.setEffect = function(fx) {
-  this.effect? this.effect.dispose(): null;
   this.currentEffect = fx; // nummer van effect in de globale 'effects' array, als deze op undefined staat is effecten niet actief
   // currentEffect variable is nodig om de cyclen met swipes
 	this.clearInstrument(); // effecten en instrument niet samen bespeelbaar
   this.effect = effects[fx].fx;
-  this.effect ? Tone.Master.chain(this.effect) : null; // zet effect als chain in master. gooit vorige chain weg: gaat dus niet op 2 handen. weet nog niet wat er gebeurd als er 2 effecten worden ingesteld
-  console.log(this.effect);
-};
+  this.effect ? Tone.Master.chain(this.effect, limiter) : null; // zet effect als chain in master. gooit vorige chain weg: gaat dus niet op 2 handen. weet nog niet wat er gebeurd als er 2 effecten worden ingesteld
+  };
 
 Hand.prototype.clearEffect = function() {
   this.effect = undefined;
@@ -53,6 +51,7 @@ Hand.prototype.setInstrument = function(instr) {
   this.currentInstr = instr;  // nummer van huidig instrument in globale 'instruments' array, undefined: geen instr maar een effect toegewezen
   this.clearEffect(); // effecten en instrument niet samen bespeelbaar
   this.instrument = instruments[instr].instrument.toMaster(); // connect instr to master (masterchain met effect komt hierna)
+  console.log(this.instrument);
 };
 
 Hand.prototype.clearInstrument = function() {
@@ -122,7 +121,7 @@ Hand.prototype.updateFinger = function() { //detect trigger + updatefinger
   this.handMenu.update();
 
   // TODO: per effect moet er een ander value getracked worden anders ERROR
-  this.effect ? this.effect.wet.value = this.reMap(this.position.y, -50, 50, 0, 1) : null;
+  this.effect && this.effect.wet ? this.effect.wet.value = this.reMap(this.position.y, -50, 50, 1, 0) : null;
   if (!this.playMode) { // noten stoppen in menu mode
     this.releaseNotes();
   }

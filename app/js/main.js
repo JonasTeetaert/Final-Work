@@ -1,43 +1,31 @@
-var fps, threeController, leapController, leftHand, rightHand, menu, noteMap, frame, instruments, effects, scene, BTSynth; // frame globaal zette: kunnen  alle objecten er aan? bij elke update de globale frame object updaten
+var fps, threeController, leapController, leftHand, rightHand, menu, noteMap, frame, instruments, effects, scene, BT1, limiter; // frame globaal zette: kunnen  alle objecten er aan? bij elke update de globale frame object updaten
 
 document.addEventListener('DOMContentLoaded', function() {
 	console.log('main.js is loaded');
 	fps = new FPS(60);
+
 	Tone.Transport.start();
 	noteMap = ['C5', 'D5', 'E5', 'F5', 'G5', 'A5', 'B5', 'C6', 'D6', 'E6'];
-	
-	/*instruments = [
-		new Tone.PolySynth(1, Tone.Synth),
-		new Tone.PolySynth(1, Tone.AMSynth),
-		new Tone.PolySynth(1, Tone.FMSynth),
-		new Tone.PolySynth(1, Tone.DuoSynth)
+
+	limiter = new Tone.Limiter(-6).receive("limiter");
+
+	instruments = [
+	new Instrument(new Tone.PolySynth(1, Tone.Synth), 'Synth'),
+	new Instrument(new Tone.PolySynth(1, Tone.AMSynth), 'AMSynth'),
+	new Instrument(new Tone.PolySynth(1, Tone.FMSynth), 'FMSynth'),
+	new Instrument(new Tone.PolySynth(1, Tone.DuoSynth), 'DuoSynth'),
 	];
 
 	effects = [
-		new Tone.Chorus(),
-		new Tone.AutoFilter("4n", 0),
-		new Tone.Vibrato(),
-		new Tone.JCReverb(0.7),
-		new Tone.PingPongDelay("16n",0.7)
-		];*/
+	new Effect(new Tone.Chorus(), 'Chorus'),
+	new Effect(new Tone.AutoFilter("4n", 0), 'AutoFilter'),
+	new Effect(new Tone.Vibrato(), 'Vibrato'),
+	new Effect(new Tone.JCReverb(0.7), 'JCReverb'),
+	new Effect(new Tone.PingPongDelay("16n",0.7), 'PingPongDelay'),
+	];
 
-		instruments = [
-		new Instrument(new Tone.PolySynth(1, Tone.Synth), 'Synth'),
-		new Instrument(new Tone.PolySynth(1, Tone.AMSynth), 'AMSynth'),
-		new Instrument(new Tone.PolySynth(1, Tone.FMSynth), 'FMSynth'),
-		new Instrument(new Tone.PolySynth(1, Tone.DuoSynth), 'DuoSynth'),
-		];
-
-		effects = [
-		new Effect(new Tone.Chorus(), 'Chorus'),
-		new Effect(new Tone.AutoFilter("4n", 0), 'AutoFilter'),
-		new Effect(new Tone.Vibrato(), 'Vibrato'),
-		new Effect(new Tone.JCReverb(0.7), 'JCReverb'),
-		new Effect(new Tone.PingPongDelay("16n",0.7), 'PingPongDelay'),
-		];
-
-		leapController = new LeapController();
-		threeController = new ThreeController();
+	leapController = new LeapController();
+	threeController = new ThreeController();
 
 
 	// menu moet voor handen geïnitialiseerd worden
@@ -66,5 +54,8 @@ document.addEventListener('DOMContentLoaded', function() {
 	); // (synthNumber, array of notes, notelength, looplength)
 
   //BT1.play();
+
+  Tone.Transport.start();
+
   window.requestAnimFrame(render);
 });
