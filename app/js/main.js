@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	limiter = new Tone.Limiter(-6).receive("limiter");
 
 	instruments = [
+    new Instrument(new Tone.PolySynth(1, Tone.PluckSynth), 'PluckSynth'),
 		new Instrument(new Tone.PolySynth(1, Tone.Synth), 'Synth'),
 		new Instrument(new Tone.PolySynth(1, Tone.AMSynth), 'AMSynth'),
 		new Instrument(new Tone.PolySynth(1, Tone.FMSynth), 'FMSynth'),
@@ -18,7 +19,6 @@ document.addEventListener('DOMContentLoaded', function() {
 		new Effect(new Tone.Chorus(), 'Chorus'),
 		new Effect(new Tone.AutoFilter("4n", 0), 'AutoFilter'),
 		new Effect(new Tone.Vibrato(), 'Vibrato'),
-		new Effect(new Tone.JCReverb(0.7), 'JCReverb'),
 		new Effect(new Tone.PingPongDelay("16n",0.7), 'PingPongDelay'),
 	];
 
@@ -36,20 +36,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	leftHand.setEffect(0);
 
-	rightHand.setInstrument(1);
+	rightHand.setInstrument(0);
 
   //TODO: meer en betere backingtracks voorzien
-  BT1 = new BT(
-  	new Tone.PolySynth(3, Tone.AMSynth),
-  	[["0m", "C3"], ["0m", "E3"], ["0m", "G3"],
-  	["1m", "C3"], ["1m", "F3"], ["1m", "A3"],
-  	["2m", "D3"], ["2m", "G3"], ["2m", "B3"],
-  	["3m", "C3"], ["3m", "E3"], ["3m", "G3"]],
-  	"1m",
-  	"4m"
-	); // (synthNumber, array of notes, notelength, looplength)
+  BT1 = new BT(115);
 
-  //BT1.play();
+  BT1.play();
 
   Tone.Transport.start();
 
