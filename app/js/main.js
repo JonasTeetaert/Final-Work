@@ -54,8 +54,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	BT1 = new BT(115);
 
-	BT1.play();
-
 	Tone.Transport.start();
 
 	window.requestAnimFrame(render);

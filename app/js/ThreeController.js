@@ -10,6 +10,7 @@ var ThreeController = function() {
 	this.planeFar = -2000;
 	this.zOutofBounds = 200;
 	this.globalSpeed = 20;
+	this.gridDepth = 470;
 
 	// 3D CAMERA
 	this.camera = new THREE.PerspectiveCamera(
@@ -38,24 +39,32 @@ ThreeController.prototype.init = function() {
 	this.camera.position.set(0, 30, 200);
 
 	// grid
-	this.initGrid(150,20,470,0xff00ff, 0x0000ff);
+	this.initGrid(150,20,this.gridDepth,0xff00ff, 0x0000ff);
 
 	//particles 
 	this.particles = new Object();
 	this.particles.array = {};
 	this.particles.index = 0;
-	//this.particleMaterial = new THREE.LineBasicMaterial({color: 0xffffff});
 	this.particleMaterial = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
 	this.particleLength = 10;
 
+	// finger particles
+	this.fingerParticles = new Object();
+	this.fingerParticles.array = {};
+	this.fingerParticles.index = 0;
 }
 
 ThreeController.prototype.render = function() {
 	// draw the grid
-	this.drawGrid(150,20,470,0xff00ff, 0x0000ff);
+	this.drawGrid(150,20,this.gridDepth,0xff00ff, 0x0000ff);
 
 	// draw particles
 	this.drawParticles();
+
+	// finger particles laten bewegen
+	for (var i in this.fingerParticles.array) {
+		this.fingerParticles.array[i].move(10);
+	}
 
 	this.renderer.render(scene, this.camera);
 }
@@ -165,4 +174,13 @@ ThreeController.prototype.drawParticles = function() {
 	for (var i in this.particles.array) {
 		this.particles.array[i].move(20);
 	}
+}
+
+ThreeController.prototype.drawFingerParticle = function( x, y, fingerIndex) {
+	var fingerParticle = new Particle(this.fingerParticles);
+	fingerParticle.material = new THREE.MeshBasicMaterial( {color: fingerParticle.setColor(fingerIndex)} );
+	fingerParticle.geometry = new THREE.BoxGeometry(10, 10, 1);
+	fingerParticle.threeObject = new THREE.Mesh(fingerParticle.geometry, fingerParticle.material);
+	fingerParticle.threeObject.position.set( x, y, -this.gridDepth);
+	scene.add(fingerParticle.threeObject);
 }

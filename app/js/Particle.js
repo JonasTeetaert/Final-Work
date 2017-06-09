@@ -29,3 +29,14 @@ Particle.prototype.destroy = function() {
 	scene.remove(this.threeObject);
 	delete this.parent.array[this.id];
 }
+
+Particle.prototype.setColor = function(fingerIndex) {
+	switch (fingerIndex) {
+		case 0: return new THREE.Color( 0xff0000 ); break;
+		case 1: return new THREE.Color( 0x00ff00 ); break;
+		case 2: return new THREE.Color( 0x0000ff ); break;
+		case 3: return new THREE.Color( 0xffff00 ); break;
+		case 4: return new THREE.Color( 0xff00ff ); break;
+		default: return new THREE.Color( 0xffffff ); break;
+	}
+}

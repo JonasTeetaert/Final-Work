@@ -113,6 +113,7 @@ Hand.prototype.updateFinger = function() { //detect trigger + updatefinger
       //kijken of vinger naar beneden is en vorig frame niet: trigger. zoniet word hij getriggerd elk frame hij naar beneden is
       if (this.fingers[i].isDown && !this.fingers[i].wasDown && this.playMode && this.instrument) {
         this.instrument.triggerAttack(this.fingers[i].note);
+        threeController.drawFingerParticle(this.fingers[i].position.x, this.fingers[i].position.y, i);
       } else if (this.fingers[i].wasDown && !this.fingers[i].isDown && this.instrument) {
         // note releasen (afzetten) als vinger recht is en vorig frame niet
         this.instrument.triggerRelease(this.fingers[i].note);

@@ -21,10 +21,12 @@ Menu.prototype.toggleBT = function (e) {
 			this.BTNode.classList.remove('fa-volume-off');
 			this.BTNode.classList.add('fa-volume-up');
 			this.BTactive = true;
+			BT1.play();
 		} else {
 			this.BTNode.classList.remove('fa-volume-up');
 			this.BTNode.classList.add('fa-volume-off');
 			this.BTactive = false;
+			BT1.pause();
 		}
 	}
 } 
