@@ -5,14 +5,16 @@ var BT = function(bpm) {
   Tone.Transport.bpm.value = bpm;
   this.paused = true;
 
-  var pluckSynth = new Tone.PolySynth(3, Tone.PluckSynth).connect(limiter);
+  //var pluckSynth = new Tone.PolySynth(3, Tone.PluckSynth).connect(limiter); //synthvariation
   var synth = new Tone.PolySynth(3, Tone.AMSynth).connect(limiter);
+  synth.set("volume", -10);
 
   this.part = new Tone.Part(function (time, note) {
-    synth.triggerAttackRelease(note, "1m", time);
+    synth.triggerAttackRelease(note, "2n", time);
   }, [["0m", "C3"], ["0m", "E3"], ["0m", "G3"],
     ["1m", "C3"], ["1m", "F3"], ["1m", "A3"],
     ["2m", "D3"], ["2m", "G3"], ["2m", "B3"],
+    ["2m+8n*6", "D3"], ["2m+8n*6", "G3"], ["2m+8n*6", "B3"],
     ["3m", "C3"], ["3m", "E3"], ["3m", "G3"]]);
 
   this.part.loop = true;
@@ -57,6 +59,7 @@ var BT = function(bpm) {
   this.snareSeq = new Tone.Sequence(function(time){
     snare.triggerAttackRelease(0, "2n", time);
   }, [null, 1, null, 1]);
+  this.snareSeq.humanize = 0.01;
 
   this.hatsLoop = new Tone.Loop({
     "callback" : function(time){
@@ -65,6 +68,7 @@ var BT = function(bpm) {
     "interval" : "8n",
     "probability" : 0.9
   });
+  this.hatsLoop.humanize = 0.01;
 };
 
 BT.prototype.play = function() {

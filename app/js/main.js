@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	fps = new FPS(60);
 	noteMap = ['C5', 'D5', 'E5', 'F5', 'G5', 'A5', 'B5', 'C6', 'D6', 'E6'];
 
-	limiter = new Tone.Limiter(-6).receive("limiter");
+	limiter = new Tone.Limiter(-6);
 
 	instruments = [
     new Instrument(new Tone.PolySynth(1, Tone.PluckSynth), 'PluckSynth'),
@@ -14,6 +14,12 @@ document.addEventListener('DOMContentLoaded', function() {
 		new Instrument(new Tone.PolySynth(1, Tone.FMSynth), 'FMSynth'),
 		new Instrument(new Tone.PolySynth(1, Tone.DuoSynth), 'DuoSynth'),
 	];
+
+	instruments[0].instrument.set("volume", 6);
+  instruments[1].instrument.set("volume", -6);
+  instruments[2].instrument.set("volume", 0);
+  instruments[3].instrument.set("volume", -6);
+  instruments[4].instrument.set("volume", -3);
 
 	effects = [
 		new Effect(new Tone.Chorus(), 'Chorus'),

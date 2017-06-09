@@ -6,7 +6,6 @@ function render() {
     frame = leapController.controller.frame();
 
     leftHand.update();
-
     rightHand.update();
     // menu.checkPlayMode();
     // TODO: warning bij effect op elk hand?

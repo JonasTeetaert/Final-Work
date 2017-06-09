@@ -40,7 +40,7 @@ Hand.prototype.setEffect = function(fx) {
 	this.clearInstrument(); // effecten en instrument niet samen bespeelbaar
   this.effect = effects[fx].fx;
   this.effect ? Tone.Master.chain(this.effect, limiter) : null; // zet effect als chain in master. gooit vorige chain weg: gaat dus niet op 2 handen. weet nog niet wat er gebeurd als er 2 effecten worden ingesteld
-  console.log(this.effect.name);
+  console.log(this.effect);
 };
 
 Hand.prototype.clearEffect = function() {
@@ -52,7 +52,7 @@ Hand.prototype.setInstrument = function(instr) {
   this.currentInstr = instr;  // nummer van huidig instrument in globale 'instruments' array, undefined: geen instr maar een effect toegewezen
   this.clearEffect(); // effecten en instrument niet samen bespeelbaar
   this.instrument = instruments[instr].instrument.toMaster(); // connect instr to master (masterchain met effect komt hierna)
-  console.log(this.instrument.name);
+  console.log(this.instrument);
 };
 
 Hand.prototype.clearInstrument = function() {
