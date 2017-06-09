@@ -6,13 +6,10 @@ function render() {
     frame = leapController.controller.frame();
 
     leftHand.update();
-
     rightHand.update();
-    
-    // TODO: warning bij effect op elk hand?
-    // TODO: bij 2 verschillende instrumenten die tezamen gespeeld worden: gain te hoog 'gekraak'
 
   }
+  
   threeController.render();
   window.requestAnimFrame(render);
 }

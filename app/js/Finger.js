@@ -16,8 +16,6 @@ var Finger = function(note, position, direction) {
                         // if this isn't done notes get triggered every frame a finger is down
   this.active = false;  // gebruiken voor te stoppen met tekenen?
 
-  //TODO: add  trigger var?
-
   this.threeObject.position.x = this.position.x;
   this.threeObject.position.y = this.position.y;
   this.threeObject.position.z = this.position.z;

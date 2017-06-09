@@ -40,7 +40,8 @@ Hand.prototype.setEffect = function(fx) {
 	this.clearInstrument(); // effecten en instrument niet samen bespeelbaar
   this.effect = effects[fx].fx;
   this.effect ? Tone.Master.chain(this.effect, limiter) : null; // zet effect als chain in master. gooit vorige chain weg: gaat dus niet op 2 handen. weet nog niet wat er gebeurd als er 2 effecten worden ingesteld
-  };
+  console.log(this.effect);
+};
 
 Hand.prototype.clearEffect = function() {
   this.effect = undefined;
